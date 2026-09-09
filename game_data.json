@@ -1,0 +1,278 @@
+{
+  "items": [
+    {
+      "id": "umbrella",
+      "name": "かさ",
+      "kanji": "傘",
+      "meaning": "ร่ม",
+      "price": 800,
+      "price_read": "はっぴゃく えん",
+      "geom": "umbrella",
+      "color": "#0ea5e9"
+    },
+    {
+      "id": "book",
+      "name": "ほん",
+      "kanji": "本",
+      "meaning": "หนังสือ",
+      "price": 600,
+      "price_read": "ろっぴゃく えん",
+      "geom": "book",
+      "color": "#f97316"
+    },
+    {
+      "id": "notebook",
+      "name": "ノート",
+      "kanji": "手帳",
+      "meaning": "สมุดบันทึก",
+      "price": 300,
+      "price_read": "さんびゃく えん",
+      "geom": "notebook",
+      "color": "#10b981"
+    },
+    {
+      "id": "dictionary",
+      "name": "じしょ",
+      "kanji": "辞書",
+      "meaning": "พจนานุกรม",
+      "price": 3000,
+      "price_read": "さんぜん えん",
+      "geom": "dictionary",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "clock",
+      "name": "とけい",
+      "kanji": "時計",
+      "meaning": "นาฬิกา",
+      "price": 8000,
+      "price_read": "はっせん えん",
+      "geom": "clock",
+      "color": "#eab308"
+    },
+    {
+      "id": "camera",
+      "name": "カメラ",
+      "kanji": "写真機",
+      "meaning": "กล้องถ่ายรูป",
+      "price": 10000,
+      "price_read": "いちまん えん",
+      "geom": "camera",
+      "color": "#64748b"
+    },
+    {
+      "id": "pen",
+      "name": "ボールペン",
+      "kanji": "万年筆",
+      "meaning": "ปากกาลูกลื่น",
+      "price": 150,
+      "price_read": "ひゃく ごじゅう えん",
+      "geom": "pen",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "pencil",
+      "name": "シャープペンシル",
+      "kanji": "鉛筆",
+      "meaning": "ดินสอกด",
+      "price": 240,
+      "price_read": "にひゃく よんじゅう えん",
+      "geom": "pencil",
+      "color": "#ec4899"
+    },
+    {
+      "id": "key",
+      "name": "かぎ",
+      "kanji": "鍵",
+      "meaning": "กุญแจ",
+      "price": 500,
+      "price_read": "ごひゃく えん",
+      "geom": "key",
+      "color": "#e2e8f0"
+    },
+    {
+      "id": "newspaper",
+      "name": "しんぶん",
+      "kanji": "新聞",
+      "meaning": "หนังสือพิมพ์",
+      "price": 130,
+      "price_read": "ひゃく さんじゅう えん",
+      "geom": "newspaper",
+      "color": "#cbd5e1"
+    },
+    {
+      "id": "bag",
+      "name": "かばん",
+      "kanji": "鞄",
+      "meaning": "กระเป๋า",
+      "price": 4500,
+      "price_read": "よんせん ごひゃく えん",
+      "geom": "bag",
+      "color": "#a855f7"
+    },
+    {
+      "id": "tv",
+      "name": "テレビ",
+      "kanji": "受像機",
+      "meaning": "โทรทัศน์",
+      "price": 28000,
+      "price_read": "にまん はっせん えん",
+      "geom": "tv",
+      "color": "#334155"
+    }
+  ],
+  "customers": [
+    {
+      "id": "miller",
+      "name": "マイク・ミラー",
+      "country": "アメリカ (อเมริกา)",
+      "job": "かいしゃいん (พนักงานบริษัท)",
+      "job_id": "company",
+      "age": 28,
+      "age_read": "にじゅうはっさい",
+      "avatar": "👨‍💼",
+      "shirt_color": "#2563eb",
+      "hair_color": "#d97706"
+    },
+    {
+      "id": "tanaka",
+      "name": "たなか",
+      "country": "にほん (ญี่ปุ่น)",
+      "job": "かいしゃいん (พนักงานบริษัท)",
+      "job_id": "company",
+      "age": 35,
+      "age_read": "さんじゅうごさい",
+      "avatar": "🧑‍💼",
+      "shirt_color": "#475569",
+      "hair_color": "#1e293b"
+    },
+    {
+      "id": "yamada",
+      "name": "やまだ",
+      "country": "にほん (ญี่ปุ่น)",
+      "job": "ぎんこういん (พนักงานธนาคาร)",
+      "job_id": "bank",
+      "age": 38,
+      "age_read": "さんじゅうはっさい",
+      "avatar": "🤵",
+      "shirt_color": "#0284c7",
+      "hair_color": "#0f172a"
+    },
+    {
+      "id": "santos",
+      "name": "サントス",
+      "country": "ブラジル (บราซิล)",
+      "job": "かいしゃいん (พนักงานบริษัท)",
+      "job_id": "company",
+      "age": 39,
+      "age_read": "さんじゅうきゅうさい",
+      "avatar": "👨",
+      "shirt_color": "#059669",
+      "hair_color": "#374151"
+    },
+    {
+      "id": "wang",
+      "name": "ワン",
+      "country": "ちゅうごく (จีน)",
+      "job": "いしゃ (หมอ / แพทย์)",
+      "job_id": "doctor",
+      "age": 33,
+      "age_read": "さんじゅうさんさい",
+      "avatar": "👨‍⚕️",
+      "shirt_color": "#0d9488",
+      "hair_color": "#18181b"
+    },
+    {
+      "id": "suzuki",
+      "name": "すずき",
+      "country": "にほん (ญี่ปุ่น)",
+      "job": "せんせい (อาจารย์)",
+      "job_id": "teacher",
+      "age": 42,
+      "age_read": "よんじゅうにさい",
+      "avatar": "👨‍🏫",
+      "shirt_color": "#7c3aed",
+      "hair_color": "#27272a"
+    },
+    {
+      "id": "thawaphon",
+      "name": "タワポン",
+      "country": "タイ (ไทย)",
+      "job": "かいしゃいん (พนักงานบริษัท)",
+      "job_id": "company",
+      "age": 24,
+      "age_read": "にじゅうよんさい",
+      "avatar": "👦",
+      "shirt_color": "#e11d48",
+      "hair_color": "#111827"
+    },
+    {
+      "id": "ellie",
+      "name": "エリー",
+      "country": "イギリス (อังกฤษ)",
+      "job": "がくせい (นักเรียน)",
+      "job_id": "student",
+      "age": 8,
+      "age_read": "はっさい (8 ขวบ)",
+      "avatar": "👧",
+      "shirt_color": "#db2777",
+      "hair_color": "#b45309"
+    },
+    {
+      "id": "napa",
+      "name": "ナパ",
+      "country": "タイ (ไทย)",
+      "job": "けんきゅうしゃ (นักวิจัย)",
+      "job_id": "researcher",
+      "age": 20,
+      "age_read": "はたち (20 ปี)",
+      "avatar": "👩‍🔬",
+      "shirt_color": "#4f46e5",
+      "hair_color": "#09090b"
+    },
+    {
+      "id": "schmidt",
+      "name": "シュミット",
+      "country": "ドイツ (เยอรมนี)",
+      "job": "エンジニア (วิศวกร)",
+      "job_id": "engineer",
+      "age": 1,
+      "age_read": "いっさい (1 ขวบ)",
+      "avatar": "👶",
+      "shirt_color": "#ca8a04",
+      "hair_color": "#d97706"
+    }
+  ],
+  "departments": [
+    {
+      "name": "うけつけ",
+      "kanji": "受付",
+      "meaning": "แผนกต้อนรับ",
+      "floor": "1かい"
+    },
+    {
+      "name": "じむしょ",
+      "kanji": "事務所",
+      "meaning": "สำนักงาน / ออฟฟิศ",
+      "floor": "2かい"
+    },
+    {
+      "name": "かいぎしつ",
+      "kanji": "会議室",
+      "meaning": "ห้องประชุม",
+      "floor": "3かい"
+    },
+    {
+      "name": "しょくどう",
+      "kanji": "食堂",
+      "meaning": "โรงอาหาร",
+      "floor": "ちか1かい (B1)"
+    },
+    {
+      "name": "お手洗い",
+      "kanji": "トイレ",
+      "meaning": "ห้องน้ำ",
+      "floor": "1かい / 2かい"
+    }
+  ]
+}

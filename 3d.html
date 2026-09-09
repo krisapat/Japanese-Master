@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>コンビニ 3D キャッシャー - Konbini 3D Cashier Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Kanit', 'Noto Sans JP', 'sans-serif'],
+            jp: ['Noto Sans JP', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          },
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d'
+            },
+            surface: {
+              900: '#090d16',
+              800: '#0f172a',
+              700: '#1e293b',
+              600: '#334155'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      box-sizing: border-box;
+    }
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #090d16;
+      font-family: 'Kanit', 'Noto Sans JP', sans-serif;
+      touch-action: manipulation;
+    }
+    canvas#webgl {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      display: block;
+    }
+    .hud-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .hud-interactive {
+      pointer-events: auto;
+    }
+    .touch-target {
+      min-height: 44px;
+    }
+    /* Anti-slop clean frosted glass */
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    .bubble-tail::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 10px 10px 0;
+      border-style: solid;
+      border-color: rgba(15, 23, 42, 0.92) transparent;
+      display: block;
+      width: 0;
+    }
+    @keyframes pulseSubtle {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+    .anim-pulse {
+      animation: pulseSubtle 2.5s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="dark text-slate-100 antialiased">
+  <canvas id="webgl"></canvas>
+
+  <div class="hud-layer p-3 md:p-6 pb-4 sm:pb-6">
+    <!-- Top Bar Navigation & Statistics -->
+    <header class="hud-interactive flex items-center justify-between w-full max-w-5xl mx-auto">
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a href="index.html" class="glass-panel px-3 py-2 rounded-xl text-xs sm:text-sm font-medium hover:bg-slate-800/80 transition-colors flex items-center gap-1.5 text-slate-200">
+          <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+          <span class="hidden xs:inline">หน้าหลัก</span>ข้อสอบ 2D
+        </a>
+        <div class="glass-panel px-3 py-1.5 rounded-xl flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-xs font-mono text-slate-300">🏪 LAWSON 3D</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <div class="glass-panel px-3 py-1.5 rounded-xl flex items-center gap-2">
+          <span class="text-xs text-slate-400">กะที่:</span>
+          <span id="shift-badge" class="text-xs font-semibold text-emerald-400">1 (ตรวจสิ่งของ)</span>
+        </div>
+        <div class="glass-panel px-3 py-1.5 rounded-xl flex items-center gap-2 font-mono">
+          <span class="text-xs text-slate-400">คะแนน:</span>
+          <span id="score-val" class="text-sm font-bold text-amber-400">0</span>
+        </div>
+        <button id="btn-audio-toggle" class="glass-panel w-9 h-9 rounded-xl flex items-center justify-center text-slate-200 hover:text-emerald-400 transition-colors">
+          <svg id="icon-sound-on" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Center Stage 3D Dialogue & Prompt Area -->
+    <main class="w-full max-w-xl mx-auto flex flex-col items-center justify-center my-auto px-2">
+      <!-- NPC Dialogue Bubble -->
+      <div id="npc-bubble" class="hud-interactive glass-panel bubble-tail relative px-5 py-3.5 rounded-2xl mb-4 max-w-md w-full text-center transition-all duration-300 transform scale-100">
+        <div class="flex items-center justify-center gap-2 mb-1">
+          <span id="npc-avatar-badge" class="text-lg">🧑‍💼</span>
+          <span id="npc-name-badge" class="text-xs font-semibold text-emerald-400">ลูกค้ากำลังเดินมา</span>
+          <button id="btn-speak-prompt" class="p-1 rounded-md text-slate-400 hover:text-white transition-colors" title="ฟังเสียงอ่าน">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M11 5L6 9H2v6h4l5 4V5z"></path></svg>
+          </button>
+        </div>
+        <p id="npc-japanese-text" class="text-base sm:text-lg font-bold text-white font-jp">「いらっしゃいませ！」</p>
+        <p id="npc-thai-sub" class="text-xs text-slate-400 mt-0.5">ยินดีต้อนรับครับ!</p>
+      </div>
+
+      <!-- Item Inspection HUD Card (Appears during scanning) -->
+      <div id="item-inspect-card" class="hud-interactive glass-panel rounded-2xl p-4 w-full max-w-sm mb-2 hidden border border-slate-700/60">
+        <div class="flex items-center justify-between">
+          <span class="text-xs text-slate-400 uppercase tracking-wider font-mono">OBJECT SCANNER</span>
+          <span id="scanner-price" class="text-xs font-mono font-bold text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded-lg border border-amber-800/40">¥0</span>
+        </div>
+        <div class="mt-2 text-center">
+          <div id="scanner-name-jp" class="text-xl font-bold font-jp text-emerald-300">...</div>
+          <div id="scanner-name-th" class="text-xs text-slate-400 mt-0.5">...</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Interactive Cashier Terminal Console -->
+    <footer class="hud-interactive w-full max-w-xl mx-auto">
+      <div class="glass-panel rounded-3xl p-3.5 sm:p-4 border border-slate-700/80 shadow-2xl">
+        <!-- Question Prompt Header -->
+        <div class="flex items-center justify-between mb-2.5 pb-2 border-b border-slate-700/50">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span id="task-directive" class="text-xs font-medium text-slate-300">เลือกลูกค้า หรือ สินค้าที่ถูกต้อง</span>
+          </div>
+          <span id="streak-counter" class="text-[11px] font-mono text-emerald-400 font-semibold">ต่อเนื่อง: 0</span>
+        </div>
+
+        <!-- 4 Multiple Choice Action Buttons (Thumb Optimized) -->
+        <div id="choice-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
+          <button class="choice-btn glass-panel touch-target p-2.5 sm:p-3 rounded-xl text-left border border-slate-700/70 hover:border-emerald-500/80 active:scale-[0.98] transition-all flex flex-col justify-center">
+            <span class="text-xs sm:text-sm font-bold text-white font-jp leading-tight">ตัวเลือก 1</span>
+            <span class="text-[11px] text-slate-400 mt-0.5 leading-tight">คำแปลไทย</span>
+          </button>
+          <button class="choice-btn glass-panel touch-target p-2.5 sm:p-3 rounded-xl text-left border border-slate-700/70 hover:border-emerald-500/80 active:scale-[0.98] transition-all flex flex-col justify-center">
+            <span class="text-xs sm:text-sm font-bold text-white font-jp leading-tight">ตัวเลือก 2</span>
+            <span class="text-[11px] text-slate-400 mt-0.5 leading-tight">คำแปลไทย</span>
+          </button>
+          <button class="choice-btn glass-panel touch-target p-2.5 sm:p-3 rounded-xl text-left border border-slate-700/70 hover:border-emerald-500/80 active:scale-[0.98] transition-all flex flex-col justify-center">
+            <span class="text-xs sm:text-sm font-bold text-white font-jp leading-tight">ตัวเลือก 3</span>
+            <span class="text-[11px] text-slate-400 mt-0.5 leading-tight">คำแปลไทย</span>
+          </button>
+          <button class="choice-btn glass-panel touch-target p-2.5 sm:p-3 rounded-xl text-left border border-slate-700/70 hover:border-emerald-500/80 active:scale-[0.98] transition-all flex flex-col justify-center">
+            <span class="text-xs sm:text-sm font-bold text-white font-jp leading-tight">ตัวเลือก 4</span>
+            <span class="text-[11px] text-slate-400 mt-0.5 leading-tight">คำแปลไทย</span>
+          </button>
+        </div>
+
+        <!-- Explanation Toast (Shows briefly after answer) -->
+        <div id="explanation-box" class="mt-2.5 pt-2 border-t border-slate-700/50 text-[11px] sm:text-xs text-slate-300 hidden flex items-start gap-2">
+          <span id="explanation-icon" class="text-emerald-400 font-bold">✓</span>
+          <p id="explanation-text" class="leading-relaxed flex-1">คำอธิบาย</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Game Database Injection
+    const GAME_DATA = {"items": [{"id": "umbrella", "name": "かさ", "kanji": "傘", "meaning": "ร่ม", "price": 800, "price_read": "はっぴゃく えん", "geom": "umbrella", "color": "#0ea5e9"}, {"id": "book", "name": "ほん", "kanji": "本", "meaning": "หนังสือ", "price": 600, "price_read": "ろっぴゃく えん", "geom": "book", "color": "#f97316"}, {"id": "notebook", "name": "ノート", "kanji": "手帳", "meaning": "สมุดบันทึก", "price": 300, "price_read": "さんびゃく えん", "geom": "notebook", "color": "#10b981"}, {"id": "dictionary", "name": "じしょ", "kanji": "辞書", "meaning": "พจนานุกรม", "price": 3000, "price_read": "さんぜん えん", "geom": "dictionary", "color": "#8b5cf6"}, {"id": "clock", "name": "とけい", "kanji": "時計", "meaning": "นาฬิกา", "price": 8000, "price_read": "はっせん えん", "geom": "clock", "color": "#eab308"}, {"id": "camera", "name": "カメラ", "kanji": "写真機", "meaning": "กล้องถ่ายรูป", "price": 10000, "price_read": "いちまん えん", "geom": "camera", "color": "#64748b"}, {"id": "pen", "name": "ボールペン", "kanji": "万年筆", "meaning": "ปากกาลูกลื่น", "price": 150, "price_read": "ひゃく ごじゅう えん", "geom": "pen", "color": "#3b82f6"}, {"id": "pencil", "name": "シャープペンシル", "kanji": "鉛筆", "meaning": "ดินสอกด", "price": 240, "price_read": "にひゃく よんじゅう えん", "geom": "pencil", "color": "#ec4899"}, {"id": "key", "name": "かぎ", "kanji": "鍵", "meaning": "กุญแจ", "price": 500, "price_read": "ごひゃく えん", "geom": "key", "color": "#e2e8f0"}, {"id": "newspaper", "name": "しんぶん", "kanji": "新聞", "meaning": "หนังสือพิมพ์", "price": 130, "price_read": "ひゃく さんじゅう えん", "geom": "newspaper", "color": "#cbd5e1"}, {"id": "bag", "name": "かばん", "kanji": "鞄", "meaning": "กระเป๋า", "price": 4500, "price_read": "よんせん ごひゃく えん", "geom": "bag", "color": "#a855f7"}, {"id": "tv", "name": "テレビ", "kanji": "受像機", "meaning": "โทรทัศน์", "price": 28000, "price_read": "にまん はっせん えん", "geom": "tv", "color": "#334155"}], "customers": [{"id": "miller", "name": "マイク・ミラー", "country": "アメリカ (อเมริกา)", "job": "かいしゃいん (พนักงานบริษัท)", "job_id": "company", "age": 28, "age_read": "にじゅうはっさい", "avatar": "👨‍💼", "shirt_color": "#2563eb", "hair_color": "#d97706"}, {"id": "tanaka", "name": "たなか", "country": "にほん (ญี่ปุ่น)", "job": "かいしゃいん (พนักงานบริษัท)", "job_id": "company", "age": 35, "age_read": "さんじゅうごさい", "avatar": "🧑‍💼", "shirt_color": "#475569", "hair_color": "#1e293b"}, {"id": "yamada", "name": "やまだ", "country": "にほん (ญี่ปุ่น)", "job": "ぎんこういん (พนักงานธนาคาร)", "job_id": "bank", "age": 38, "age_read": "さんじゅうはっさい", "avatar": "🤵", "shirt_color": "#0284c7", "hair_color": "#0f172a"}, {"id": "santos", "name": "サントス", "country": "ブラジル (บราซิล)", "job": "かいしゃいん (พนักงานบริษัท)", "job_id": "company", "age": 39, "age_read": "さんじゅうきゅうさい", "avatar": "👨", "shirt_color": "#059669", "hair_color": "#374151"}, {"id": "wang", "name": "ワン", "country": "ちゅうごく (จีน)", "job": "いしゃ (หมอ / แพทย์)", "job_id": "doctor", "age": 33, "age_read": "さんじゅうさんさい", "avatar": "👨‍⚕️", "shirt_color": "#0d9488", "hair_color": "#18181b"}, {"id": "suzuki", "name": "すずき", "country": "にほん (ญี่ปุ่น)", "job": "せんせい (อาจารย์)", "job_id": "teacher", "age": 42, "age_read": "よんじゅうにさい", "avatar": "👨‍🏫", "shirt_color": "#7c3aed", "hair_color": "#27272a"}, {"id": "thawaphon", "name": "タワポン", "country": "タイ (ไทย)", "job": "かいしゃいん (พนักงานบริษัท)", "job_id": "company", "age": 24, "age_read": "にじゅうよんさい", "avatar": "👦", "shirt_color": "#e11d48", "hair_color": "#111827"}, {"id": "ellie", "name": "エリー", "country": "イギリス (อังกฤษ)", "job": "がくせい (นักเรียน)", "job_id": "student", "age": 8, "age_read": "はっさい (8 ขวบ)", "avatar": "👧", "shirt_color": "#db2777", "hair_color": "#b45309"}, {"id": "napa", "name": "ナパ", "country": "タイ (ไทย)", "job": "けんきゅうしゃ (นักวิจัย)", "job_id": "researcher", "age": 20, "age_read": "はたち (20 ปี)", "avatar": "👩‍🔬", "shirt_color": "#4f46e5", "hair_color": "#09090b"}, {"id": "schmidt", "name": "シュミット", "country": "ドイツ (เยอรมนี)", "job": "エンジニア (วิศวกร)", "job_id": "engineer", "age": 1, "age_read": "いっさい (1 ขวบ)", "avatar": "👶", "shirt_color": "#ca8a04", "hair_color": "#d97706"}], "departments": [{"name": "うけつけ", "kanji": "受付", "meaning": "แผนกต้อนรับ", "floor": "1かい"}, {"name": "じむしょ", "kanji": "事務所", "meaning": "สำนักงาน / ออฟฟิศ", "floor": "2かい"}, {"name": "かいぎしつ", "kanji": "会議室", "meaning": "ห้องประชุม", "floor": "3かい"}, {"name": "しょくどう", "kanji": "食堂", "meaning": "โรงอาหาร", "floor": "ちか1かい (B1)"}, {"name": "お手洗い", "kanji": "トイレ", "meaning": "ห้องน้ำ", "floor": "1かい / 2かい"}]};
+
+    // Global State
+    let currentScore = 0;
+    let streakCount = 0;
+    let currentShift = 1; // 1: Items (Things), 2: Customers (ID & Age), 3: Pricing & Place
+    let currentQuestion = null;
+    let isProcessing = false;
+    let soundEnabled = true;
+    let maleVoice = null;
+
+    // Web Speech API Japanese Male Voice Discovery
+    function initSpeech() {
+      if (!('speechSynthesis' in window)) return;
+      const selectVoice = () => {
+        const voices = window.speechSynthesis.getVoices();
+        const jpVoices = voices.filter(v => v.lang.startsWith('ja') || v.lang === 'ja_JP');
+        const maleKeywords = ['male', 'ichiro', 'keita', 'takumi', 'naoki', 'daichi', 'kenji', 'otoko'];
+        maleVoice = jpVoices.find(v => maleKeywords.some(kw => v.name.toLowerCase().includes(kw))) || jpVoices[0] || null;
+      };
+      window.speechSynthesis.onvoiceschanged = selectVoice;
+      selectVoice();
+    }
+
+    function speakJapanese(text) {
+      if (!soundEnabled || !('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ja-JP';
+      if (maleVoice) utterance.voice = maleVoice;
+      utterance.pitch = 0.78;
+      utterance.rate = 0.90;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Three.js 3D Konbini Scene Setup
+    let scene, camera, renderer;
+    let customerMeshGroup, counterMesh, item3DMesh;
+    let clock = new THREE.Clock();
+
+    function initThree() {
+      const container = document.getElementById('webgl');
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0a0f1d);
+      scene.fog = new THREE.FogExp2(0x0a0f1d, 0.04);
+
+      camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.set(0, 1.4, 3.6);
+      camera.lookAt(0, 1.1, 0);
+
+      renderer = new THREE.WebGLRenderer({ canvas: container, antialias: true, powerPreference: "high-performance" });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+      // Lighting: Warm Convenience Store Ambience + Modern Accents
+      const ambientLight = new THREE.AmbientLight(0xdce7f9, 0.85);
+      scene.add(ambientLight);
+
+      const ceilingLight = new THREE.PointLight(0xffffff, 1.2, 10);
+      ceilingLight.position.set(0, 3, 1);
+      ceilingLight.castShadow = true;
+      scene.add(ceilingLight);
+
+      const counterAccentLight = new THREE.SpotLight(0x38bdf8, 1.8, 8, Math.PI / 4, 0.3);
+      counterAccentLight.position.set(1.5, 2.8, 0.5);
+      counterAccentLight.target.position.set(0, 0.8, 0);
+      scene.add(counterAccentLight);
+      scene.add(counterAccentLight.target);
+
+      // Store Environment: Floor & Back Wall
+      const floorGeo = new THREE.PlaneGeometry(16, 16);
+      const floorMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.3, metalness: 0.2 });
+      const floor = new THREE.Mesh(floorGeo, floorMat);
+      floor.rotation.x = -Math.PI / 2;
+      floor.receiveShadow = true;
+      scene.add(floor);
+
+      const wallGeo = new THREE.PlaneGeometry(16, 8);
+      const wallMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.8 });
+      const backWall = new THREE.Mesh(wallGeo, wallMat);
+      backWall.position.set(0, 3, -3.5);
+      backWall.receiveShadow = true;
+      scene.add(backWall);
+
+      // Convenience Store Shelves in background
+      createStoreShelves();
+
+      // Cashier Counter
+      const counterGeo = new THREE.BoxGeometry(2.4, 0.85, 0.9);
+      const counterMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.2, metalness: 0.1 });
+      counterMesh = new THREE.Mesh(counterGeo, counterMat);
+      counterMesh.position.set(0, 0.425, 0.2);
+      counterMesh.castShadow = true;
+      counterMesh.receiveShadow = true;
+      scene.add(counterMesh);
+
+      // Register Scanner Machine 3D
+      const posBaseGeo = new THREE.BoxGeometry(0.35, 0.12, 0.35);
+      const posBaseMat = new THREE.MeshStandardMaterial({ color: 0x334155 });
+      const posBase = new THREE.Mesh(posBaseGeo, posBaseMat);
+      posBase.position.set(0.65, 0.91, 0.2);
+      scene.add(posBase);
+
+      const posScreenGeo = new THREE.BoxGeometry(0.3, 0.22, 0.04);
+      const posScreenMat = new THREE.MeshStandardMaterial({ color: 0x10b981, emissive: 0x064e3b, emissiveIntensity: 0.5 });
+      const posScreen = new THREE.Mesh(posScreenGeo, posScreenMat);
+      posScreen.position.set(0.65, 1.05, 0.22);
+      posScreen.rotation.x = -0.2;
+      scene.add(posScreen);
+
+      // Customer 3D Mesh Group
+      customerMeshGroup = new THREE.Group();
+      customerMeshGroup.position.set(0, 0, -1.1);
+      scene.add(customerMeshGroup);
+
+      buildCustomer3D('#2563eb', '#1e293b');
+
+      // 3D Item on Counter Group
+      item3DMesh = new THREE.Group();
+      item3DMesh.position.set(-0.25, 0.92, 0.2);
+      scene.add(item3DMesh);
+
+      window.addEventListener('resize', onWindowResize);
+      animate();
+    }
+
+    function createStoreShelves() {
+      const shelfMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.5 });
+      const itemMatA = new THREE.MeshStandardMaterial({ color: 0xef4444 });
+      const itemMatB = new THREE.MeshStandardMaterial({ color: 0x3b82f6 });
+      const itemMatC = new THREE.MeshStandardMaterial({ color: 0x10b981 });
+
+      for (let i = -2; i <= 2; i += 2) {
+        const shelf = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.2, 0.4), shelfMat);
+        shelf.position.set(i * 1.5, 1.1, -2.5);
+        shelf.castShadow = true;
+        scene.add(shelf);
+
+        // Fill with colorful drink cans & snack boxes
+        for (let row = 0; row < 3; row++) {
+          for (let col = -2; col <= 2; col++) {
+            const can = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.14, 8), (col + row) % 2 === 0 ? itemMatA : (col % 2 === 0 ? itemMatB : itemMatC));
+            can.position.set(i * 1.5 + col * 0.12, 0.4 + row * 0.6, -2.35);
+            scene.add(can);
+          }
+        }
+      }
+    }
+
+    function buildCustomer3D(shirtHex, hairHex) {
+      // Clear existing customer body parts
+      while (customerMeshGroup.children.length > 0) {
+        customerMeshGroup.remove(customerMeshGroup.children[0]);
+      }
+
+      // Torso / Suit
+      const torsoGeo = new THREE.BoxGeometry(0.55, 0.7, 0.28);
+      const torsoMat = new THREE.MeshStandardMaterial({ color: shirtHex, roughness: 0.6 });
+      const torso = new THREE.Mesh(torsoGeo, torsoMat);
+      torso.position.y = 1.05;
+      torso.castShadow = true;
+      customerMeshGroup.add(torso);
+
+      // Head
+      const headGeo = new THREE.SphereGeometry(0.2, 24, 24);
+      const skinMat = new THREE.MeshStandardMaterial({ color: 0xfbd2ac, roughness: 0.7 });
+      const head = new THREE.Mesh(headGeo, skinMat);
+      head.position.y = 1.55;
+      head.castShadow = true;
+      customerMeshGroup.add(head);
+
+      // Hair
+      const hairGeo = new THREE.BoxGeometry(0.42, 0.16, 0.42);
+      const hairMat = new THREE.MeshStandardMaterial({ color: hairHex, roughness: 0.8 });
+      const hair = new THREE.Mesh(hairGeo, hairMat);
+      hair.position.set(0, 1.68, -0.02);
+      customerMeshGroup.add(hair);
+
+      // Eyes
+      const eyeGeo = new THREE.SphereGeometry(0.025, 8, 8);
+      const eyeMat = new THREE.MeshBasicMaterial({ color: 0x0f172a });
+      const eyeLeft = new THREE.Mesh(eyeGeo, eyeMat);
+      eyeLeft.position.set(-0.07, 1.55, 0.18);
+      const eyeRight = new THREE.Mesh(eyeGeo, eyeMat);
+      eyeRight.position.set(0.07, 1.55, 0.18);
+      customerMeshGroup.add(eyeLeft);
+      customerMeshGroup.add(eyeRight);
+
+      // Legs
+      const legGeo = new THREE.BoxGeometry(0.18, 0.7, 0.22);
+      const legMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.7 });
+      const legLeft = new THREE.Mesh(legGeo, legMat);
+      legLeft.position.set(-0.14, 0.35, 0);
+      const legRight = new THREE.Mesh(legGeo, legMat);
+      legRight.position.set(0.14, 0.35, 0);
+      customerMeshGroup.add(legLeft);
+      customerMeshGroup.add(legRight);
+    }
+
+    function create3DItemModel(itemType, hexColor) {
+      while (item3DMesh.children.length > 0) {
+        item3DMesh.remove(item3DMesh.children[0]);
+      }
+
+      const mat = new THREE.MeshStandardMaterial({ color: hexColor, roughness: 0.3, metalness: 0.1 });
+      const accentMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.5 });
+
+      if (itemType === 'umbrella') {
+        const cane = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.7, 12), mat);
+        cane.rotation.z = Math.PI / 4;
+        cane.castShadow = true;
+        item3DMesh.add(cane);
+        const handle = new THREE.Mesh(new THREE.TorusGeometry(0.06, 0.015, 8, 16, Math.PI), accentMat);
+        handle.position.set(0.24, 0.24, 0);
+        handle.rotation.z = -Math.PI / 4;
+        item3DMesh.add(handle);
+      } else if (itemType === 'book' || itemType === 'dictionary' || itemType === 'notebook') {
+        const thickness = itemType === 'dictionary' ? 0.15 : 0.06;
+        const book = new THREE.Mesh(new THREE.BoxGeometry(0.35, thickness, 0.48), mat);
+        book.castShadow = true;
+        item3DMesh.add(book);
+        const pages = new THREE.Mesh(new THREE.BoxGeometry(0.33, thickness * 0.9, 0.46), accentMat);
+        pages.position.x = 0.02;
+        item3DMesh.add(pages);
+      } else if (itemType === 'camera') {
+        const body = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.22, 0.18), mat);
+        body.castShadow = true;
+        item3DMesh.add(body);
+        const lens = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.12, 16), accentMat);
+        lens.rotation.x = Math.PI / 2;
+        lens.position.z = 0.12;
+        item3DMesh.add(lens);
+      } else if (itemType === 'clock') {
+        const frame = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.08, 24), mat);
+        frame.rotation.x = Math.PI / 4;
+        frame.castShadow = true;
+        item3DMesh.add(frame);
+      } else if (itemType === 'tv') {
+        const screen = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.42, 0.06), mat);
+        screen.castShadow = true;
+        item3DMesh.add(screen);
+        const stand = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.12, 0.12, 12), accentMat);
+        stand.position.y = -0.22;
+        item3DMesh.add(stand);
+      } else {
+        // General Gadget / Pen / Key Box
+        const itemBox = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.14, 0.28), mat);
+        itemBox.castShadow = true;
+        item3DMesh.add(itemBox);
+      }
+    }
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const delta = clock.getDelta();
+      const elapsed = clock.getElapsedTime();
+
+      // Subtle breathing motion for 3D Customer
+      if (customerMeshGroup) {
+        customerMeshGroup.position.y = Math.sin(elapsed * 2.2) * 0.025;
+      }
+      // Floating inspection rotation for 3D Item
+      if (item3DMesh) {
+        item3DMesh.rotation.y += delta * 0.8;
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    // Question Generator Engine
+    function nextQuestion() {
+      isProcessing = false;
+      document.getElementById('explanation-box').classList.add('hidden');
+
+      // Randomly cycle through 3 shift duties:
+      // 1: Item Identification & Ko-So-A (บทที่ 2)
+      // 2: Customer Profile (Name / Job / Age) (บทที่ 1)
+      // 3: Price & Department Location (บทที่ 3)
+      currentShift = Math.floor(Math.random() * 3) + 1;
+
+      const shiftNames = {
+        1: "1 (ตรวจสิ่งของ โค-โสะ-อะ)",
+        2: "2 (ตรวจบัตรลูกค้าและอายุ)",
+        3: "3 (คิดราคาสินค้าและแผนก)"
+      };
+      document.getElementById('shift-badge').textContent = shiftNames[currentShift];
+
+      if (currentShift === 1) {
+        generateItemQuestion();
+      } else if (currentShift === 2) {
+        generateCustomerQuestion();
+      } else {
+        generatePricingQuestion();
+      }
+    }
+
+    function generateItemQuestion() {
+      const item = GAME_DATA.items[Math.floor(Math.random() * GAME_DATA.items.length)];
+      const customer = GAME_DATA.customers[Math.floor(Math.random() * GAME_DATA.customers.length)];
+      
+      // Update 3D Character and Item
+      buildCustomer3D(customer.shirt_color, customer.hair_color);
+      create3DItemModel(item.geom, item.color);
+      item3DMesh.visible = true;
+
+      // Update HUD
+      document.getElementById('npc-avatar-badge').textContent = customer.avatar;
+      document.getElementById('npc-name-badge').textContent = customer.name;
+      const promptJp = "すみません、これは 何ですか。";
+      const promptTh = "ขอโทษนะครับ อันนี้คืออะไรเหรอครับ?";
+      document.getElementById('npc-japanese-text').textContent = promptJp;
+      document.getElementById('npc-thai-sub').textContent = promptTh;
+      document.getElementById('task-directive').textContent = "ระบุคำศัพท์สิ่งของที่ลูกค้าหยิบมาวางบนเคาน์เตอร์";
+
+      document.getElementById('item-inspect-card').classList.remove('hidden');
+      document.getElementById('scanner-price').textContent = `¥${item.price.toLocaleString()}`;
+      document.getElementById('scanner-name-jp').textContent = `${item.name} (${item.kanji})`;
+      document.getElementById('scanner-name-th').textContent = item.meaning;
+
+      speakJapanese(promptJp);
+
+      // Create 4 choices
+      const wrongItems = GAME_DATA.items.filter(i => i.id !== item.id).sort(() => 0.5 - Math.random()).slice(0, 3);
+      const choices = [
+        { textJp: `それは ${item.name} です。`, textTh: `สิ่งนั้นคือ ${item.meaning} ครับ`, isCorrect: true, reason: `สิ่งของอยู่ใกล้ผู้ฟัง (แคชเชียร์) จึงใช้ それ (นั่น/สิ่งนั้น) ตามด้วยคำศัพท์ ${item.name} (${item.meaning})` },
+        ...wrongItems.map(w => ({
+          textJp: `それは ${w.name} です。`,
+          textTh: `สิ่งนั้นคือ ${w.meaning} ครับ`,
+          isCorrect: false,
+          reason: `ผิดครับ วัตถุชิ้นนี้คือ ${item.name} (${item.meaning}) ไม่ใช่ ${w.name}`
+        }))
+      ].sort(() => 0.5 - Math.random());
+
+      currentQuestion = { choices, correctJp: item.name };
+      renderChoices(choices);
+    }
+
+    function generateCustomerQuestion() {
+      const customer = GAME_DATA.customers[Math.floor(Math.random() * GAME_DATA.customers.length)];
+      buildCustomer3D(customer.shirt_color, customer.hair_color);
+      item3DMesh.visible = false;
+      document.getElementById('item-inspect-card').classList.add('hidden');
+
+      document.getElementById('npc-avatar-badge').textContent = customer.avatar;
+      document.getElementById('npc-name-badge').textContent = customer.name;
+
+      const qTypes = ['job', 'age'];
+      const qType = qTypes[Math.floor(Math.random() * qTypes.length)];
+
+      let promptJp = "";
+      let promptTh = "";
+      let choices = [];
+
+      if (qType === 'job') {
+        promptJp = `${customer.name}さんは 何の お仕事ですか。`;
+        promptTh = `คุณ ${customer.name} ทำงานอาชีพอะไรครับ?`;
+        document.getElementById('task-directive').textContent = `ระบุอาชีพของ ${customer.name}`;
+
+        const otherJobs = [...new Set(GAME_DATA.customers.filter(c => c.job !== customer.job).map(c => ({ job: c.job, job_id: c.job_id })))].sort(() => 0.5 - Math.random()).slice(0, 3);
+        choices = [
+          { textJp: `${customer.name}さんは ${customer.job.split(' ')[0]} です。`, textTh: customer.job, isCorrect: true, reason: `ถูกต้อง! ${customer.name} มีอาชีพคือ ${customer.job}` },
+          ...otherJobs.map(oj => ({
+            textJp: `${customer.name}さんは ${oj.job.split(' ')[0]} です。`,
+            textTh: oj.job,
+            isCorrect: false,
+            reason: `ผิดครับ ${customer.name} เป็น ${customer.job}`
+          }))
+        ];
+      } else {
+        promptJp = `${customer.name}さんは おいくつですか。`;
+        promptTh = `คุณ ${customer.name} อายุเท่าไหร่ครับ?`;
+        document.getElementById('task-directive').textContent = `ระบุอายุของ ${customer.name} (สังเกตเสียงอ่านพิเศษ)`;
+
+        const otherAges = GAME_DATA.customers.filter(c => c.age !== customer.age).sort(() => 0.5 - Math.random()).slice(0, 3);
+        choices = [
+          { textJp: `${customer.age}さい (${customer.age_read}) です。`, textTh: `อายุ ${customer.age} ปี`, isCorrect: true, reason: `ถูกต้อง! อายุ ${customer.age} ขวบ/ปี ออกเสียงว่า ${customer.age_read}` },
+          ...otherAges.map(oa => ({
+            textJp: `${oa.age}さい (${oa.age_read}) です。`,
+            textTh: `อายุ ${oa.age} ปี`,
+            isCorrect: false,
+            reason: `ผิดครับ ${customer.name} อายุ ${customer.age} ปี (${customer.age_read})`
+          }))
+        ];
+      }
+
+      document.getElementById('npc-japanese-text').textContent = promptJp;
+      document.getElementById('npc-thai-sub').textContent = promptTh;
+      speakJapanese(promptJp);
+
+      choices.sort(() => 0.5 - Math.random());
+      currentQuestion = { choices };
+      renderChoices(choices);
+    }
+
+    function generatePricingQuestion() {
+      const item = GAME_DATA.items[Math.floor(Math.random() * GAME_DATA.items.length)];
+      const customer = GAME_DATA.customers[Math.floor(Math.random() * GAME_DATA.customers.length)];
+      
+      buildCustomer3D(customer.shirt_color, customer.hair_color);
+      create3DItemModel(item.geom, item.color);
+      item3DMesh.visible = true;
+
+      document.getElementById('npc-avatar-badge').textContent = customer.avatar;
+      document.getElementById('npc-name-badge').textContent = customer.name;
+
+      const promptJp = `この ${item.name}は いくらですか。`;
+      const promptTh = `${item.meaning} ชิ้นนี้ราคาเท่าไหร่ครับ?`;
+      document.getElementById('npc-japanese-text').textContent = promptJp;
+      document.getElementById('npc-thai-sub').textContent = promptTh;
+      document.getElementById('task-directive').textContent = `คิดราคา ${item.meaning} เป็นภาษาญี่ปุ่นให้ถูกต้อง (ป้าย: ¥${item.price.toLocaleString()})`;
+
+      document.getElementById('item-inspect-card').classList.remove('hidden');
+      document.getElementById('scanner-price').textContent = `¥${item.price.toLocaleString()}`;
+      document.getElementById('scanner-name-jp').textContent = `${item.name} (${item.kanji})`;
+      document.getElementById('scanner-name-th').textContent = item.meaning;
+
+      speakJapanese(promptJp);
+
+      const wrongPrices = GAME_DATA.items.filter(i => i.price !== item.price).sort(() => 0.5 - Math.random()).slice(0, 3);
+      const choices = [
+        { textJp: `${item.price_read} です。`, textTh: `${item.price.toLocaleString()} เยน`, isCorrect: true, reason: `ถูกต้อง! ¥${item.price.toLocaleString()} ออกเสียงอ่านว่า "${item.price_read}" (ระวังจุดจำเสียงเปลี่ยน)` },
+        ...wrongPrices.map(wp => ({
+          textJp: `${wp.price_read} です。`,
+          textTh: `${wp.price.toLocaleString()} เยน`,
+          isCorrect: false,
+          reason: `ผิดครับ ราคาที่ป้ายคือ ¥${item.price.toLocaleString()} ซึ่งอ่านว่า "${item.price_read}"`
+        }))
+      ].sort(() => 0.5 - Math.random());
+
+      currentQuestion = { choices };
+      renderChoices(choices);
+    }
+
+    function renderChoices(choices) {
+      const container = document.getElementById('choice-grid');
+      container.innerHTML = '';
+
+      choices.forEach((choice, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn glass-panel touch-target p-2.5 sm:p-3 rounded-xl text-left border border-slate-700/70 hover:border-emerald-500/80 active:scale-[0.98] transition-all flex flex-col justify-center';
+        btn.innerHTML = `
+          <div class="flex items-center justify-between w-full">
+            <span class="text-xs sm:text-sm font-bold text-white font-jp leading-tight">${choice.textJp}</span>
+            <span class="text-[10px] font-mono text-slate-500">0${idx+1}</span>
+          </div>
+          <span class="text-[11px] text-slate-400 mt-0.5 leading-tight">${choice.textTh}</span>
+        `;
+        btn.onclick = () => handleAnswer(choice, btn);
+        container.appendChild(btn);
+      });
+    }
+
+    function handleAnswer(choice, btnElement) {
+      if (isProcessing) return;
+      isProcessing = true;
+
+      const expBox = document.getElementById('explanation-box');
+      const expIcon = document.getElementById('explanation-icon');
+      const expText = document.getElementById('explanation-text');
+
+      if (choice.isCorrect) {
+        currentScore += 10;
+        streakCount += 1;
+        btnElement.classList.add('bg-emerald-950/80', 'border-emerald-500', 'text-emerald-200');
+        expIcon.textContent = '✓ ถูกต้อง';
+        expIcon.className = 'text-emerald-400 font-bold';
+        speakJapanese('せいかいです！ よくできました。');
+      } else {
+        streakCount = 0;
+        btnElement.classList.add('bg-rose-950/80', 'border-rose-500', 'text-rose-200');
+        expIcon.textContent = '✗ ไม่ถูกต้อง';
+        expIcon.className = 'text-rose-400 font-bold';
+        speakJapanese('ちがいます。もういちど。');
+      }
+
+      document.getElementById('score-val').textContent = currentScore;
+      document.getElementById('streak-counter').textContent = `ต่อเนื่อง: ${streakCount}`;
+      expText.textContent = choice.reason;
+      expBox.classList.remove('hidden');
+
+      setTimeout(() => {
+        nextQuestion();
+      }, choice.isCorrect ? 1600 : 2500);
+    }
+
+    // Audio prompt button listener
+    document.getElementById('btn-speak-prompt').onclick = () => {
+      const text = document.getElementById('npc-japanese-text').textContent.replace(/[「」]/g, '');
+      speakJapanese(text);
+    };
+
+    // Toggle audio button
+    document.getElementById('btn-audio-toggle').onclick = () => {
+      soundEnabled = !soundEnabled;
+      document.getElementById('icon-sound-on').classList.toggle('text-emerald-400', soundEnabled);
+      document.getElementById('icon-sound-on').classList.toggle('text-slate-500', !soundEnabled);
+    };
+
+    // Initialize App
+    window.addEventListener('DOMContentLoaded', () => {
+      initSpeech();
+      initThree();
+      nextQuestion();
+    });
+  </script>
+</body>
+</html>
