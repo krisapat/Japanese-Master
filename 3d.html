@@ -45,33 +45,36 @@
       user-select: none;
       box-sizing: border-box;
     }
-    body, html {
+    body {
       margin: 0;
       padding: 0;
       width: 100%;
-      height: 100%;
-      overflow: hidden;
+      min-height: 100vh;
+      min-height: 100dvh;
       background-color: #060911;
       font-family: 'Kanit', 'Noto Sans JP', sans-serif;
       touch-action: manipulation;
+      overflow-x: hidden;
     }
     canvas#webgl {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       z-index: 1;
       display: block;
+      pointer-events: none;
     }
     .hud-layer {
-      position: absolute;
-      inset: 0;
+      position: relative;
       z-index: 10;
-      pointer-events: none;
+      min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      pointer-events: none;
     }
     .hud-interactive {
       pointer-events: auto;
@@ -79,29 +82,37 @@
     .touch-target {
       min-height: 48px;
     }
-    /* Anti-slop clean frosted glass */
+    /* Mobile-first clean frosted glass */
     .glass-panel {
       background: rgba(15, 23, 42, 0.88);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
     }
     .scanner-glow {
-      box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
     }
     .kanji-hero {
-      text-shadow: 0 0 18px rgba(16, 185, 129, 0.4);
+      text-shadow: 0 0 16px rgba(16, 185, 129, 0.35);
     }
     .ruby-text {
       ruby-align: center;
       ruby-position: over;
     }
     rt {
-      font-size: 0.58em;
+      font-size: 0.55em;
       color: #38bdf8;
       font-weight: 500;
       letter-spacing: normal;
+    }
+    @media (max-height: 720px) {
+      .compact-hide {
+        display: none !important;
+      }
+      .compact-p {
+        padding: 0.5rem !important;
+      }
     }
   </style>
 </head>
@@ -138,56 +149,56 @@
     </header>
 
     <!-- Center Stage: Reading Inspection & Dialogue Terminal -->
-    <main class="w-full max-w-xl mx-auto flex flex-col items-center justify-center my-auto px-2">
+    <main class="w-full max-w-xl mx-auto flex flex-col items-center justify-center my-auto px-1 sm:px-2 py-1">
       <!-- NPC Dialogue Bubble (Reading Focused with Ruby Furigana) -->
-      <div id="npc-bubble" class="hud-interactive glass-panel relative px-4 py-3 sm:py-3.5 rounded-2xl mb-2.5 max-w-lg w-full text-center transition-all duration-300">
-        <div class="flex items-center justify-between gap-2 mb-1 border-b border-slate-700/50 pb-1.5">
-          <div class="flex items-center gap-2">
-            <span id="npc-avatar-badge" class="text-base">👨‍💼</span>
-            <span id="npc-name-badge" class="text-xs font-semibold text-emerald-400">マイク・ミラー</span>
-            <span id="npc-org-badge" class="text-[10px] text-slate-400 font-mono hidden xs:inline">IMC</span>
-          </div>
+      <div id="npc-bubble" class="hud-interactive glass-panel relative px-3 py-2 sm:px-4 sm:py-3.5 rounded-2xl mb-1.5 sm:mb-2 max-w-lg w-full text-center transition-all duration-300">
+        <div class="flex items-center justify-between gap-1 mb-1 border-b border-slate-700/50 pb-1">
           <div class="flex items-center gap-1.5">
-            <span class="text-[10px] bg-slate-800 text-sky-300 px-2 py-0.5 rounded border border-slate-700 font-mono">เน้นฝึกอ่าน</span>
+            <span id="npc-avatar-badge" class="text-sm sm:text-base">👨‍💼</span>
+            <span id="npc-name-badge" class="text-[11px] sm:text-xs font-semibold text-emerald-400">マイク・ミラー</span>
+            <span id="npc-org-badge" class="text-[9px] sm:text-[10px] text-slate-400 font-mono hidden xs:inline">IMC</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="text-[9px] sm:text-[10px] bg-slate-800 text-sky-300 px-1.5 py-0.5 rounded border border-slate-700 font-mono">เน้นฝึกอ่าน</span>
             <button id="btn-speak-prompt" class="p-1 rounded-md text-slate-400 hover:text-white transition-colors" title="ฟังเสียงอ่านเพื่อตรวจทาน">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M11 5L6 9H2v6h4l5 4V5z"></path></svg>
+              <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M11 5L6 9H2v6h4l5 4V5z"></path></svg>
             </button>
           </div>
         </div>
 
         <!-- Main Japanese Reading Sentence (Large Kanji + Furigana) -->
-        <div id="npc-reading-display" class="my-1.5">
+        <div id="npc-reading-display" class="my-1">
           <p id="npc-japanese-text" class="text-base sm:text-xl font-bold text-white font-jp tracking-wide leading-relaxed">
             <ruby>これ<rt>kore</rt></ruby>は <ruby>何<rt>なん</rt></ruby>ですか。
           </p>
         </div>
-        <p id="npc-thai-sub" class="text-xs text-slate-400 mt-1 leading-normal font-sans">สิ่งนี้คืออะไรเหรอครับ?</p>
+        <p id="npc-thai-sub" class="text-[11px] sm:text-xs text-slate-400 mt-0.5 leading-normal font-sans">สิ่งนี้คืออะไรเหรอครับ?</p>
       </div>
 
       <!-- Item Inspection HUD Card (Appears during scanning / pricing) -->
-      <div id="item-inspect-card" class="hud-interactive glass-panel scanner-glow rounded-2xl p-3 sm:p-3.5 w-full max-w-md mb-1.5 border border-emerald-500/30">
-        <div class="flex items-center justify-between border-b border-slate-700/60 pb-1.5">
-          <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-            <span class="text-[11px] text-emerald-400 tracking-wider font-mono font-bold">ITEM & KANJI SCANNER</span>
+      <div id="item-inspect-card" class="hud-interactive glass-panel scanner-glow rounded-2xl p-2.5 sm:p-3.5 w-full max-w-md mb-1 border border-emerald-500/30">
+        <div class="flex items-center justify-between border-b border-slate-700/60 pb-1">
+          <div class="flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <span class="text-[10px] sm:text-[11px] text-emerald-400 tracking-wider font-mono font-bold">ITEM & KANJI SCANNER</span>
           </div>
-          <div class="flex items-center gap-1.5 font-mono">
-            <span id="scanner-price-kanji" class="text-xs text-slate-300">八百円</span>
-            <span id="scanner-price" class="text-xs font-bold text-amber-400 bg-amber-950/70 px-2 py-0.5 rounded border border-amber-800/50">¥800</span>
+          <div class="flex items-center gap-1 font-mono">
+            <span id="scanner-price-kanji" class="text-[11px] sm:text-xs text-slate-300">八百円</span>
+            <span id="scanner-price" class="text-[11px] sm:text-xs font-bold text-amber-400 bg-amber-950/70 px-1.5 py-0.5 rounded border border-amber-800/50">¥800</span>
           </div>
         </div>
         
-        <div class="mt-2 flex items-center justify-between px-2">
+        <div class="mt-1.5 flex items-center justify-between px-1 sm:px-2">
           <div class="text-left">
-            <div class="flex items-baseline gap-2">
-              <span id="scanner-kanji" class="text-2xl sm:text-3xl font-black font-jp text-emerald-300 kanji-hero">傘</span>
-              <span id="scanner-kana" class="text-sm sm:text-base font-semibold font-jp text-sky-300">かさ</span>
+            <div class="flex items-baseline gap-1.5 sm:gap-2">
+              <span id="scanner-kanji" class="text-xl sm:text-3xl font-black font-jp text-emerald-300 kanji-hero">傘</span>
+              <span id="scanner-kana" class="text-xs sm:text-base font-semibold font-jp text-sky-300">かさ</span>
             </div>
-            <div id="scanner-romaji" class="text-[11px] font-mono text-slate-400">kasa</div>
+            <div id="scanner-romaji" class="text-[10px] sm:text-[11px] font-mono text-slate-400">kasa</div>
           </div>
           <div class="text-right">
-            <span id="scanner-cat" class="text-[10px] text-slate-400 bg-slate-800 px-2 py-0.5 rounded border border-slate-700">สิ่งของ (บทที่ 2)</span>
-            <div id="scanner-meaning" class="text-sm sm:text-base font-medium text-slate-200 mt-1">ร่ม</div>
+            <span id="scanner-cat" class="text-[9px] sm:text-[10px] text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700">สิ่งของ (บทที่ 2)</span>
+            <div id="scanner-meaning" class="text-xs sm:text-base font-medium text-slate-200 mt-0.5">ร่ม</div>
           </div>
         </div>
       </div>
@@ -195,25 +206,25 @@
 
     <!-- Bottom Interactive Cashier Terminal Console -->
     <footer class="hud-interactive w-full max-w-xl mx-auto">
-      <div class="glass-panel rounded-3xl p-3 sm:p-4 border border-slate-700/90 shadow-2xl">
+      <div class="glass-panel rounded-2xl sm:rounded-3xl p-2.5 sm:p-4 border border-slate-700/90 shadow-2xl">
         <!-- Question Prompt Directive Header -->
-        <div class="flex items-center justify-between mb-2 pb-1.5 border-b border-slate-700/60">
-          <div class="flex items-center gap-2 min-w-0">
-            <span class="w-2 h-2 rounded-full bg-sky-400 shrink-0"></span>
-            <span id="task-directive" class="text-xs font-medium text-slate-200 truncate">อ่านประโยคและเลือกคำตอบตัวอักษรภาษาญี่ปุ่นที่ถูกต้อง</span>
+        <div class="flex items-center justify-between mb-1.5 pb-1 border-b border-slate-700/60">
+          <div class="flex items-center gap-1.5 min-w-0">
+            <span class="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span>
+            <span id="task-directive" class="text-[11px] sm:text-xs font-medium text-slate-200 truncate">อ่านประโยคและเลือกคำตอบตัวอักษรภาษาญี่ปุ่นที่ถูกต้อง</span>
           </div>
-          <span id="streak-counter" class="text-[11px] font-mono text-emerald-400 font-semibold shrink-0 ml-2">คอมโบ: 0</span>
+          <span id="streak-counter" class="text-[10px] sm:text-[11px] font-mono text-emerald-400 font-semibold shrink-0 ml-1.5">คอมโบ: 0</span>
         </div>
 
         <!-- 4 Multiple Choice Action Buttons (Thumb Optimized) -->
-        <div id="choice-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <div id="choice-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
           <!-- Populated dynamically -->
         </div>
 
         <!-- Explanation Toast -->
-        <div id="explanation-box" class="mt-2 pt-2 border-t border-slate-700/60 text-xs text-slate-300 hidden flex items-start gap-2 bg-slate-900/50 p-2 rounded-xl">
-          <span id="explanation-icon" class="text-emerald-400 font-bold shrink-0">✓ ถูกต้อง</span>
-          <p id="explanation-text" class="leading-relaxed flex-1 text-[11px] sm:text-xs text-slate-300">คำอธิบาย</p>
+        <div id="explanation-box" class="mt-1.5 pt-1.5 border-t border-slate-700/60 text-xs text-slate-300 hidden flex items-start gap-1.5 bg-slate-900/60 p-2 rounded-xl">
+          <span id="explanation-icon" class="text-emerald-400 font-bold shrink-0 text-xs">✓ ถูกต้อง</span>
+          <p id="explanation-text" class="leading-relaxed flex-1 text-[10px] sm:text-xs text-slate-300">คำอธิบาย</p>
         </div>
       </div>
     </footer>
@@ -270,8 +281,7 @@
       scene.fog = new THREE.FogExp2(0x060911, 0.035);
 
       camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-      camera.position.set(0, 1.45, 3.8);
-      camera.lookAt(0, 1.1, 0);
+      updateCameraForViewport();
 
       renderer = new THREE.WebGLRenderer({ canvas: container, antialias: true, powerPreference: "high-performance" });
       renderer.setSize(window.innerWidth, window.innerHeight);
@@ -576,9 +586,25 @@
       }
     }
 
-    function onWindowResize() {
+    function updateCameraForViewport() {
+      if (!camera) return;
+      const isMobile = window.innerWidth < 640;
+      const isShort = window.innerHeight < 700;
+      if (isMobile) {
+        camera.fov = isShort ? 55 : 52;
+        camera.position.set(0, 1.35, 4.3);
+        camera.lookAt(0, 0.95, 0);
+      } else {
+        camera.fov = 45;
+        camera.position.set(0, 1.45, 3.8);
+        camera.lookAt(0, 1.1, 0);
+      }
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
+    }
+
+    function onWindowResize() {
+      updateCameraForViewport();
       renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
