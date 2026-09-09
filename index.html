@@ -3,26 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ADA Japanese Master - ตะลุยสอบภาษาญี่ปุ่นพื้นฐาน บทที่ 1-3</title>
+<title>ADA Japanese Master - ระบบฝึกจำและเก็งข้อสอบภาษาญี่ปุ่น (บทที่ 1-3)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Kanit:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg-main: #0b0f19;
-  --bg-card: rgba(22, 30, 49, 0.75);
-  --bg-card-hover: rgba(30, 41, 67, 0.85);
-  --primary: #4f46e5;
-  --primary-glow: rgba(79, 70, 229, 0.4);
-  --accent: #ec4899;
-  --accent-glow: rgba(236, 72, 153, 0.35);
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --text-main: #f8fafc;
+  --bg-main: #090d16;
+  --bg-surface: #111726;
+  --bg-surface-elevated: #182238;
+  --bg-surface-active: #202d4a;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(99, 102, 241, 0.5);
+  
+  --accent-primary: #4f46e5;
+  --accent-primary-hover: #4338ca;
+  --accent-glow: rgba(79, 70, 229, 0.25);
+  
+  --emerald-success: #10b981;
+  --emerald-bg: rgba(16, 185, 129, 0.12);
+  --rose-danger: #f43f5e;
+  --rose-bg: rgba(244, 63, 94, 0.12);
+  --amber-warning: #f59e0b;
+  --amber-bg: rgba(245, 158, 11, 0.12);
+  
+  --text-bright: #f8fafc;
+  --text-body: #cbd5e1;
   --text-muted: #94a3b8;
-  --border: rgba(255, 255, 255, 0.1);
-  --glass-blur: blur(16px);
+  --text-faint: #64748b;
+  
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 9999px;
+  
+  --transition-fluid: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -33,751 +48,1355 @@
 }
 
 body {
-  font-family: 'Kanit', 'Noto Sans JP', sans-serif;
+  font-family: 'Kanit', 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;
   background-color: var(--bg-main);
   background-image: 
-    radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.18) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.15) 0px, transparent 50%),
-    radial-gradient(at 50% 50%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
+    radial-gradient(circle at 10% 0%, rgba(79, 70, 229, 0.12) 0, transparent 40%),
+    radial-gradient(circle at 90% 100%, rgba(16, 185, 129, 0.08) 0, transparent 40%),
+    linear-gradient(180deg, #090d16 0%, #0c111c 100%);
   background-attachment: fixed;
-  color: var(--text-main);
-  min-height: 100vh;
+  color: var(--text-body);
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  line-height: 1.6;
+  font-size: 15px;
 }
 
-header {
-  background: rgba(11, 15, 25, 0.85);
-  backdrop-filter: var(--glass-blur);
-  border-bottom: 1px solid var(--border);
-  padding: 1rem 1.5rem;
+/* Top Navigation Bar */
+header.app-header {
+  background: rgba(12, 17, 28, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-subtle);
   position: sticky;
   top: 0;
   z-index: 100;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
+  padding: 0 1.5rem;
+  max-width: 100%;
 }
 
-.logo-wrap {
+.brand-unit {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.logo-badge {
-  background: linear-gradient(135deg, #4f46e5, #ec4899);
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
+.brand-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #4f46e5, #3730a3);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 1.3rem;
   color: #fff;
-  box-shadow: 0 4px 15px var(--accent-glow);
+  font-weight: 800;
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.logo-title {
-  font-size: 1.2rem;
+.brand-text h1 {
+  font-size: 1.05rem;
   font-weight: 700;
-  letter-spacing: -0.5px;
-}
-
-.logo-subtitle {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-.nav-tabs {
+  color: var(--text-bright);
+  letter-spacing: -0.01em;
   display: flex;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 4px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  overflow-x: auto;
+  align-items: center;
+  gap: 8px;
 }
 
-.nav-btn {
+.brand-text p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.voice-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(79, 70, 229, 0.15);
+  border: 1px solid rgba(79, 70, 229, 0.3);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 0.72rem;
+  color: #a5b4fc;
+  font-weight: 600;
+}
+
+/* Navigation Tabs */
+.nav-track {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  overflow-x: auto;
+  max-width: 100%;
+  scrollbar-width: none;
+}
+.nav-track::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-tab-btn {
   background: transparent;
   border: none;
-  padding: 8px 14px;
-  border-radius: 10px;
   color: var(--text-muted);
   font-family: inherit;
   font-size: 0.85rem;
   font-weight: 500;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition-fluid);
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.nav-btn.active {
-  background: var(--primary);
-  color: #fff;
-  box-shadow: 0 4px 12px var(--primary-glow);
+.nav-tab-btn:hover {
+  color: var(--text-bright);
+  background: rgba(255, 255, 255, 0.06);
 }
 
-.nav-btn:hover:not(.active) {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.08);
+.nav-tab-btn.active {
+  color: #ffffff;
+  background: var(--accent-primary);
+  box-shadow: 0 2px 8px var(--accent-glow);
+  font-weight: 600;
 }
 
-main {
+.nav-tab-btn .tab-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  opacity: 0.85;
+}
+
+/* Main Container */
+main.app-shell {
   flex: 1;
-  max-width: 960px;
+  max-width: 1100px;
   width: 100%;
   margin: 0 auto;
-  padding: 1.8rem 1.2rem 4rem;
+  padding: 2rem 1.25rem 3rem 1.25rem;
+}
+
+/* Card Containers */
+.surface-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  position: relative;
 }
 
 .tab-pane {
   display: none;
-  animation: fadeIn 0.3s ease;
 }
-
 .tab-pane.active {
   display: block;
+  animation: fadeIn 0.25s ease-out forwards;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.card {
-  background: var(--bg-card);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 1.8rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  margin-bottom: 1.5rem;
-}
-
-.quiz-header {
+/* Headers inside tabs */
+.section-meta {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-subtle);
   flex-wrap: wrap;
-  gap: 8px;
-}
-
-.quiz-progress-bar {
-  height: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 99px;
-  overflow: hidden;
-  margin-bottom: 1.5rem;
-}
-
-.quiz-progress-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, var(--primary), var(--accent));
-  transition: width 0.3s ease;
-}
-
-.quiz-badge {
-  display: inline-block;
-  font-size: 0.8rem;
-  padding: 4px 12px;
-  border-radius: 20px;
-  background: rgba(79, 70, 229, 0.2);
-  color: #818cf8;
-  border: 1px solid rgba(79, 70, 229, 0.3);
-}
-
-.quiz-question {
-  font-size: 1.3rem;
-  font-weight: 600;
-  line-height: 1.5;
-  margin-bottom: 1.8rem;
-}
-
-.quiz-options {
-  display: grid;
-  grid-template-columns: 1fr;
   gap: 12px;
-  margin-bottom: 1.5rem;
 }
 
-@media(min-width: 640px) {
-  .quiz-options {
-    grid-template-columns: 1fr 1fr;
+.section-meta h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+.section-meta p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Common Buttons */
+.btn-action {
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: var(--transition-fluid);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}
+.btn-action:active {
+  transform: scale(0.98);
+}
+.btn-primary {
+  background: var(--accent-primary);
+  color: #ffffff;
+  box-shadow: 0 4px 14px var(--accent-glow);
+}
+.btn-primary:hover {
+  background: var(--accent-primary-hover);
+}
+.btn-secondary {
+  background: var(--bg-surface-elevated);
+  border-color: var(--border-subtle);
+  color: var(--text-bright);
+}
+.btn-secondary:hover {
+  background: var(--bg-surface-active);
+}
+.btn-voice {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  color: #a5b4fc;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: var(--transition-fluid);
+}
+.btn-voice:hover {
+  background: rgba(79, 70, 229, 0.2);
+  color: #ffffff;
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+/* ===================================================
+   TAB 5: PERSONA VISUAL CHALLENGE (Part สุดท้าย - ดูภาพ ตอบชื่อ อายุ อาชีพ)
+   =================================================== */
+.persona-grid-wrap {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 1.5rem;
+}
+@media (max-width: 820px) {
+  .persona-grid-wrap {
+    grid-template-columns: 1fr;
   }
 }
 
-.quiz-opt-btn {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 14px 18px;
-  font-size: 1.05rem;
-  font-family: inherit;
-  color: var(--text-main);
-  text-align: left;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.quiz-opt-btn:hover:not(:disabled) {
-  background: var(--bg-card-hover);
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
-}
-
-.quiz-opt-btn.correct {
-  background: rgba(16, 185, 129, 0.25) !important;
-  border-color: var(--success) !important;
-  color: #34d399;
-  font-weight: 600;
-}
-
-.quiz-opt-btn.wrong {
-  background: rgba(239, 68, 68, 0.25) !important;
-  border-color: var(--danger) !important;
-  color: #f87171;
-}
-
-.quiz-explain {
-  display: none;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 14px;
-  padding: 1.2rem;
-  border-left: 4px solid var(--primary);
-  margin-top: 1.5rem;
-  animation: fadeIn 0.3s ease;
-}
-
-.quiz-explain.active {
-  display: block;
-}
-
-.tip-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.85rem;
-  color: #f59e0b;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.quiz-next-btn {
-  background: linear-gradient(135deg, var(--primary), #6366f1);
-  color: #fff;
-  border: none;
-  padding: 12px 28px;
-  border-radius: 12px;
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 1.2rem;
-}
-
-.quiz-next-btn:hover {
-  filter: brightness(1.1);
-  box-shadow: 0 4px 15px var(--primary-glow);
-}
-
-/* Flashcards */
-.flash-wrap {
-  perspective: 1000px;
-  width: 100%;
-  max-width: 480px;
-  height: 310px;
-  margin: 0 auto 1.8rem;
-  cursor: pointer;
-}
-
-.flash-card {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 24px;
-}
-
-.flash-wrap.flipped .flash-card {
-  transform: rotateY(180deg);
-}
-
-.flash-face {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: 24px;
-  padding: 1.8rem;
+/* ID Card Visual */
+.id-card {
+  background: linear-gradient(145deg, #161e31, #101624);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   text-align: center;
-  border: 1px solid var(--border);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+.id-card::before {
+  content: "OFFICIAL PROFILE";
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.35);
 }
 
-.flash-front {
-  background: linear-gradient(145deg, rgba(30, 41, 67, 0.95), rgba(15, 23, 42, 0.98));
+.id-badge-chip {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  background: rgba(79, 70, 229, 0.25);
+  border: 1px solid rgba(79, 70, 229, 0.4);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  color: #c7d2fe;
 }
 
-.flash-back {
-  background: linear-gradient(145deg, rgba(49, 36, 77, 0.95), rgba(24, 18, 43, 0.98));
-  transform: rotateY(180deg);
+.id-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 46px;
+  margin: 1rem 0 0.75rem 0;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
 }
 
-.flash-kanji {
-  font-size: 3.8rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  color: #fff;
-}
-
-.flash-kana {
+.id-person-name {
   font-size: 1.35rem;
-  color: #818cf8;
-  margin-bottom: 0.6rem;
-}
-
-.flash-th {
-  font-size: 1.65rem;
   font-weight: 700;
-  color: #34d399;
-  margin-bottom: 0.8rem;
+  color: var(--text-bright);
+  font-family: 'Noto Sans JP', 'Kanit', sans-serif;
 }
 
-.flash-mnem {
-  font-size: 0.95rem;
-  color: #fbcfe8;
-  background: rgba(236, 72, 153, 0.15);
-  padding: 8px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(236, 72, 153, 0.25);
+.id-person-meta {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.id-specs {
+  width: 100%;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.id-spec-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+}
+.id-spec-label {
+  color: var(--text-faint);
+  font-weight: 500;
+}
+.id-spec-val {
+  color: var(--text-bright);
+  font-weight: 600;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+/* Right side: Questions & Grammar */
+.persona-quiz-pane {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.persona-question-text {
+  font-size: 1.05rem;
+  color: var(--text-bright);
+  font-weight: 600;
+  margin-bottom: 1.25rem;
   line-height: 1.5;
 }
 
-.flash-controls {
+.persona-options {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.ctrl-btn {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--border);
-  color: #fff;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
+.persona-opt-btn {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  text-align: left;
+  font-family: 'Noto Sans JP', 'Kanit', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text-bright);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition-fluid);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.persona-opt-btn:hover:not(:disabled) {
+  background: var(--bg-surface-active);
+  border-color: var(--border-focus);
+  transform: translateX(4px);
+}
+.persona-opt-btn.correct {
+  background: var(--emerald-bg);
+  border-color: var(--emerald-success);
+  color: #34d399;
+}
+.persona-opt-btn.wrong {
+  background: var(--rose-bg);
+  border-color: var(--rose-danger);
+  color: #fb7185;
 }
 
-.ctrl-btn:hover {
-  background: var(--primary);
-  border-color: var(--primary);
-  transform: scale(1.05);
+.persona-opt-index {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  flex-shrink: 0;
 }
 
-/* Speed Rush */
-.rush-timer-bar {
-  height: 10px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 99px;
+/* Breakdown box after answer */
+.persona-breakdown {
+  margin-top: 1.25rem;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: none;
+}
+.persona-breakdown.show {
+  display: block;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.breakdown-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #a5b4fc;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.88rem;
+  color: var(--text-body);
+}
+.breakdown-item strong {
+  color: var(--text-bright);
+}
+
+/* ===================================================
+   TAB 1: QUIZ ENGINE (30 Items)
+   =================================================== */
+.quiz-stage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.quiz-counter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.quiz-score-pill {
+  background: rgba(79, 70, 229, 0.18);
+  border: 1px solid rgba(79, 70, 229, 0.3);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  color: #c7d2fe;
+  font-weight: 600;
+}
+
+.quiz-question {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-bright);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.quiz-options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quiz-opt-btn {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  text-align: left;
+  font-family: 'Noto Sans JP', 'Kanit', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text-bright);
+  cursor: pointer;
+  transition: var(--transition-fluid);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.quiz-opt-btn:hover:not(:disabled) {
+  background: var(--bg-surface-active);
+  border-color: var(--border-focus);
+}
+.quiz-opt-btn.correct {
+  background: var(--emerald-bg);
+  border-color: var(--emerald-success);
+  color: #34d399;
+}
+.quiz-opt-btn.wrong {
+  background: var(--rose-bg);
+  border-color: var(--rose-danger);
+  color: #fb7185;
+}
+
+.quiz-feedback {
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  border-radius: var(--radius-md);
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid var(--border-subtle);
+  display: none;
+}
+.quiz-feedback.show {
+  display: block;
+}
+
+/* ===================================================
+   TAB 2: 3D FLASHCARDS (40 Items)
+   =================================================== */
+.fc-filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+.fc-filter-chip {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: var(--transition-fluid);
+}
+.fc-filter-chip.active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #ffffff;
+}
+
+.flashcard-stage {
+  perspective: 1000px;
+  max-width: 520px;
+  height: 310px;
+  margin: 0 auto 1.5rem auto;
+  cursor: pointer;
+}
+
+.flashcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+}
+.flashcard-stage.flipped .flashcard-inner {
+  transform: rotateY(180deg);
+}
+
+.flashcard-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+.flashcard-front {
+  background: linear-gradient(145deg, #182238, #111827);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.flashcard-back {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  transform: rotateY(180deg);
+}
+
+.fc-kanji {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 4.5rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  line-height: 1.1;
+}
+.fc-sub {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+.fc-th-meaning {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #38bdf8;
+  margin-bottom: 8px;
+}
+.fc-reading {
+  font-size: 1.15rem;
+  color: var(--text-bright);
+  margin-bottom: 12px;
+}
+.fc-mnem-box {
+  font-size: 0.85rem;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  max-width: 90%;
+}
+
+/* ===================================================
+   TAB 3: SPEED RUN (ตอบไว 5 วินาที)
+   =================================================== */
+.rush-timer-bar-wrap {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-pill);
   overflow: hidden;
   margin-bottom: 1.5rem;
 }
-
-.rush-timer-fill {
+.rush-timer-bar {
   height: 100%;
   width: 100%;
   background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
-  transition: width 0.1s linear;
+  transform-origin: left;
+  transition: transform 0.1s linear;
 }
 
-.rush-word {
-  font-size: 2.8rem;
+.rush-prompt {
   text-align: center;
+  padding: 2.5rem 1rem;
+}
+.rush-word {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 3.5rem;
   font-weight: 700;
-  margin: 1.2rem 0;
-  color: #fff;
+  color: var(--text-bright);
+  letter-spacing: 0.02em;
 }
 
-/* Cheat Sheets */
+/* ===================================================
+   TAB 4: CHEAT SHEET (สรุปจุดตาย)
+   =================================================== */
 .sheet-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
 }
-
 .sheet-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border);
-  border-radius: 16px;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
   padding: 1.5rem;
 }
-
-.sheet-title {
-  font-size: 1.15rem;
-  font-weight: 600;
+.sheet-card h3 {
+  font-size: 1.05rem;
   color: #818cf8;
-  margin-bottom: 1rem;
-}
-
-.sheet-content {
-  font-size: 0.95rem;
-  line-height: 1.8;
-  color: #cbd5e1;
-  white-space: pre-wrap;
-}
-
-.voice-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--border);
-  color: #fff;
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-size: 0.78rem;
-  cursor: pointer;
-  margin-left: 8px;
-  display: inline-flex;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
+}
+.sheet-content {
+  font-size: 0.88rem;
+  color: var(--text-body);
+  white-space: pre-line;
+  line-height: 1.7;
 }
 
-.voice-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+/* Footer */
+footer.app-footer {
+  border-top: 1px solid var(--border-subtle);
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-faint);
+  margin-top: auto;
 }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo-wrap">
-    <div class="logo-badge">あ</div>
-    <div>
-      <div class="logo-title">ADA Japanese Master</div>
-      <div class="logo-subtitle">เก็งข้อสอบและตะลุยจำภาษาญี่ปุ่นเบื้องต้น (บทที่ 1-3)</div>
+<header class="app-header">
+  <div class="brand-unit">
+    <div class="brand-badge">日</div>
+    <div class="brand-text">
+      <h1>Japanese Master <span class="voice-badge-pill">🎙️ เสียงผู้ชาย (Male JP)</span></h1>
+      <p>ระบบข้อสอบและเทคนิคจำสำหรับสอบ บทที่ 1-3</p>
     </div>
   </div>
 
-  <nav class="nav-tabs">
-    <button class="nav-btn active" onclick="switchTab('quiz')">📝 จำลองข้อสอบ</button>
-    <button class="nav-btn" onclick="switchTab('flashcard')">🎴 แฟลชการ์ดช่วยจำ</button>
-    <button class="nav-btn" onclick="switchTab('rush')">⚡ ตอบไวสปีดรัน</button>
-    <button class="nav-btn" onclick="switchTab('sheet')">📌 สรุปเก็งสอบจุดตาย</button>
+  <nav class="nav-track">
+    <button class="nav-tab-btn active" onclick="switchTab('persona')">
+      🖼️ <span>พาร์ทภาพ: ชื่อ-อายุ-อาชีพ</span> <span class="tab-num">10</span>
+    </button>
+    <button class="nav-tab-btn" onclick="switchTab('quiz')">
+      📝 <span>ข้อสอบเก็งจุดตาย</span> <span class="tab-num">30</span>
+    </button>
+    <button class="nav-tab-btn" onclick="switchTab('flashcard')">
+      🎴 <span>แฟลชการ์ด 3D</span> <span class="tab-num">40</span>
+    </button>
+    <button class="nav-tab-btn" onclick="switchTab('rush')">
+      ⚡ <span>สปีดรัน 5 วิ</span>
+    </button>
+    <button class="nav-tab-btn" onclick="switchTab('sheet')">
+      📌 <span>สรุปกฎเหล็ก</span>
+    </button>
   </nav>
 </header>
 
-<main>
-  <!-- TAB 1: QUIZ -->
-  <section id="tab-quiz" class="tab-pane active">
-    <div class="card">
-      <div class="quiz-header">
-        <span id="quiz-cat" class="quiz-badge">หมวดหมู่</span>
-        <span id="quiz-score" style="font-weight:600; color:var(--text-muted);">ข้อที่ 1 / 30 | คะแนน: 0</span>
-      </div>
-      <div class="quiz-progress-bar">
-        <div id="quiz-progress" class="quiz-progress-fill"></div>
-      </div>
-      
-      <div id="quiz-q" class="quiz-question">คำถามกำลังโหลด...</div>
-      
-      <div id="quiz-opts" class="quiz-options"></div>
+<main class="app-shell">
 
-      <div id="quiz-exp" class="quiz-explain">
-        <div class="tip-pill">🎯 เทคนิคเก็งสอบและจำง่าย:</div>
-        <div id="quiz-tip-text" style="margin-bottom:8px; font-weight:500;"></div>
-        <div id="quiz-hint-text" style="color:var(--text-muted); font-size:0.9rem;"></div>
-        <button id="quiz-next" class="quiz-next-btn" onclick="nextQuizQuestion()">ข้อถัดไป ➔</button>
+  <!-- ==========================================
+       TAB: PERSONA (พาร์ทดูภาพ ตอบชื่อ อายุ อาชีพ)
+       ========================================== -->
+  <section id="tab-persona" class="tab-pane active">
+    <div class="surface-panel">
+      <div class="section-meta">
+        <div>
+          <h2>Part สุดท้าย: ข้อสอบดูภาพ วิเคราะห์บุคคล (บทที่ 1-2)</h2>
+          <p>ฝึกแต่งประโยคระบุ [ชื่อ] さんは [อายุ] さいです。[อาชีพ/สังกัด] です。 ตามโครงสร้างที่ใช้สอบจริง</p>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <span class="quiz-score-pill" id="persona-score-badge">คะแนน: 0 / 10</span>
+          <button class="btn-voice" onclick="speakPersonaCard()">🔊 ฟังเสียงอ่านรูปประโยค (ชาย)</button>
+        </div>
+      </div>
+
+      <div class="persona-grid-wrap">
+        <!-- Visual ID Card -->
+        <div class="id-card" id="persona-card-el">
+          <div class="id-badge-chip" id="p-card-num">CARD 01 / 10</div>
+          <div class="id-avatar" id="p-avatar-box">💼</div>
+          <div class="id-person-name" id="p-name-jp">ミラーさん</div>
+          <div class="id-person-meta" id="p-name-en">Miller (ชาวอเมริกัน)</div>
+          
+          <div class="id-specs">
+            <div class="id-spec-row">
+              <span class="id-spec-label">อายุ (Age):</span>
+              <span class="id-spec-val" id="p-age-val">28 ปี (にじゅうはっさい)</span>
+            </div>
+            <div class="id-spec-row">
+              <span class="id-spec-label">อาชีพ (Job):</span>
+              <span class="id-spec-val" id="p-job-val">พนักงานบริษัท (かいしゃいん)</span>
+            </div>
+            <div class="id-spec-row">
+              <span class="id-spec-label">สังกัด (Org):</span>
+              <span class="id-spec-val" id="p-org-val">IMC</span>
+            </div>
+            <div class="id-spec-row" style="margin-top: 6px;">
+              <span class="id-spec-label">ลักษณะภาพ:</span>
+              <span class="id-spec-val" style="font-size: 0.76rem; color: var(--text-muted);" id="p-desc-val">สวมสูท ถือกระเป๋า</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quiz Question & Options -->
+        <div class="persona-quiz-pane">
+          <div>
+            <div class="quiz-counter" style="margin-bottom: 8px;" id="p-counter-text">คำถามที่ 1 จาก 10</div>
+            <div class="persona-question-text" id="p-question-text">จากข้อมูลในบัตรประจำตัว จงระบุข้อมูล 'ชื่อ - อายุ - อาชีพ' ให้ถูกต้องตามหลักไวยากรณ์บทที่ 1</div>
+            
+            <div class="persona-options" id="p-options-container">
+              <!-- Options populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Breakdown Explanation -->
+          <div class="persona-breakdown" id="p-breakdown-box">
+            <div class="breakdown-title">
+              <span>💡 คำอธิบายไวยากรณ์และจุดสังเกตในห้องสอบ</span>
+            </div>
+            <div class="breakdown-list">
+              <div class="breakdown-item"><strong>ชื่อและสัญชาติ:</strong> <span id="b-name"></span></div>
+              <div class="breakdown-item"><strong>การอ่านอายุ:</strong> <span id="b-age"></span></div>
+              <div class="breakdown-item"><strong>ตำแหน่งและสังกัด:</strong> <span id="b-job"></span></div>
+              <div class="breakdown-item"><strong>โครงสร้างประโยค:</strong> <span id="b-formula" style="color: #38bdf8;"></span></div>
+            </div>
+            <div style="margin-top: 14px; text-align: right;">
+              <button class="btn-action btn-primary" id="p-next-btn" onclick="nextPersona()">ข้อถัดไป ➔</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- TAB 2: FLASHCARDS -->
+  <!-- ==========================================
+       TAB: QUIZ (ข้อสอบ 30 ข้อ)
+       ========================================== -->
+  <section id="tab-quiz" class="tab-pane">
+    <div class="surface-panel">
+      <div class="section-meta">
+        <div>
+          <h2>จำลองข้อสอบเก็งจุดตาย (30 ข้อ ครบ 14 ไฟล์)</h2>
+          <p>คัดเฉพาะจุดที่ข้อสอบชอบหลอก คำช่วย は も の สัญชาติ และตัวเลขอายุ</p>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <span class="quiz-score-pill" id="quiz-score-pill">คะแนน: 0 / 30</span>
+          <button class="btn-voice" onclick="speakCurrentQuiz()">🔊 ฟังคำถาม (ชาย)</button>
+        </div>
+      </div>
+
+      <div class="quiz-stage-header">
+        <span class="quiz-counter" id="quiz-progress-text">ข้อที่ 1 / 30</span>
+        <span class="voice-badge-pill" id="quiz-cat-pill">หมวดหมู่</span>
+      </div>
+
+      <div class="quiz-question" id="quiz-q-text">กำลังโหลดข้อสอบ...</div>
+      
+      <div class="quiz-options-grid" id="quiz-opt-box">
+        <!-- populated dynamically -->
+      </div>
+
+      <div class="quiz-feedback" id="quiz-feedback-box">
+        <div style="font-weight: 600; color: #a5b4fc; margin-bottom: 6px;" id="quiz-ans-status">คำอธิบายเฉลย:</div>
+        <div style="font-size: 0.9rem; color: var(--text-body); margin-bottom: 6px;" id="quiz-hint-text"></div>
+        <div style="font-size: 0.85rem; color: #fbbf24;" id="quiz-tip-text"></div>
+        <div style="margin-top: 14px; text-align: right;">
+          <button class="btn-action btn-primary" id="quiz-next-btn" onclick="nextQuiz()">ข้อถัดไป ➔</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       TAB: FLASHCARDS (แฟลชการ์ด 3D 40 ใบ)
+       ========================================== -->
   <section id="tab-flashcard" class="tab-pane">
-    <div style="text-align:center; margin-bottom:1.5rem;">
-      <h2 style="font-size:1.5rem; margin-bottom:0.4rem;">🎴 แฟลชการ์ดจำด้วยภาพ & จินตภาพ</h2>
-      <p style="color:var(--text-muted); font-size:0.9rem;">คลิกที่การ์ดเพื่อพลิกดูคำอ่าน ความหมาย และเทคนิคจินตภาพช่วยจำ</p>
-    </div>
-
-    <div class="flash-wrap" id="flashcard-box" onclick="flipCard()">
-      <div class="flash-card">
-        <div class="flash-face flash-front">
-          <span class="quiz-badge" id="fc-cat" style="position:absolute; top:20px; left:20px;">หมวด</span>
-          <div class="flash-kanji" id="fc-jp">一</div>
-          <div style="color:var(--text-muted); font-size:0.85rem;">(คลิกเพื่อดูเฉลยและวิธีจำ)</div>
+    <div class="surface-panel">
+      <div class="section-meta">
+        <div>
+          <h2>แฟลชการ์ดช่วยจำด้วยจินตภาพ (3D Flashcards)</h2>
+          <p>คลิกที่การ์ดเพื่อพลิกดูความหมาย ตัวอ่าน และเทคนิคจำแบบไม่ท่องจำ</p>
         </div>
-        <div class="flash-face flash-back">
-          <div class="flash-kana" id="fc-kana">いち (ichi)</div>
-          <div class="flash-th" id="fc-th">1 (หนึ่ง)</div>
-          <div class="flash-mnem" id="fc-mnem">💡 เทคนิคจำ: ลากเส้น 1 ขีด</div>
+        <button class="btn-voice" onclick="speakCurrentCard()">🔊 ฟังเสียงตัวอ่าน (ชาย)</button>
+      </div>
+
+      <div class="fc-filter-bar" id="fc-filter-container">
+        <!-- Filter chips -->
+      </div>
+
+      <div class="flashcard-stage" id="fc-stage" onclick="flipCard()">
+        <div class="flashcard-inner">
+          <div class="flashcard-face flashcard-front">
+            <div class="fc-kanji" id="fc-front-kanji">一</div>
+            <div class="fc-sub">แตะเพื่อดูคำอ่านและความหมาย</div>
+          </div>
+          <div class="flashcard-face flashcard-back">
+            <div class="fc-th-meaning" id="fc-back-th">1 (หนึ่ง)</div>
+            <div class="fc-reading" id="fc-back-kana">いち (ichi)</div>
+            <div class="fc-mnem-box" id="fc-back-mnem">💡 เส้นแนวนอน 1 เส้น</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="flash-controls">
-      <button class="ctrl-btn" onclick="prevCard()">❮</button>
-      <span id="fc-counter" style="font-weight:600; min-width:80px; text-align:center;">1 / 30</span>
-      <button class="ctrl-btn" onclick="nextCard()">❯</button>
+      <div style="display: flex; justify-content: center; gap: 12px; margin-top: 1rem;">
+        <button class="btn-action btn-secondary" onclick="prevCard()">⬅️ ย้อนกลับ</button>
+        <button class="btn-action btn-secondary" onclick="nextCard()">ใบถัดไป ➡️</button>
+      </div>
     </div>
   </section>
 
-  <!-- TAB 3: SPEED RUSH -->
+  <!-- ==========================================
+       TAB: SPEED RUN
+       ========================================== -->
   <section id="tab-rush" class="tab-pane">
-    <div class="card" style="text-align:center;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-        <span class="quiz-badge">⚡ สปีดรัน 5 วินาที</span>
-        <span style="font-weight:600; color:#34d399;" id="rush-score">คะแนน: 0</span>
+    <div class="surface-panel" style="max-width: 700px; margin: 0 auto;">
+      <div class="section-meta">
+        <div>
+          <h2>สปีดรันตอบไว 5 วินาที (Reaction Mode)</h2>
+          <p>ฝึกสมองแปลความหมายทันทีโดยไม่ต้องคิดเป็นภาษาไทย</p>
+        </div>
+        <span class="quiz-score-pill" id="rush-streak-pill">สตรีค: 0</span>
       </div>
 
-      <div class="rush-timer-bar">
-        <div id="rush-timer" class="rush-timer-fill"></div>
+      <div class="rush-timer-bar-wrap">
+        <div class="rush-timer-bar" id="rush-bar"></div>
       </div>
 
-      <div id="rush-display">
-        <div id="rush-word" class="rush-word">準備</div>
-        <p style="color:var(--text-muted); margin-bottom:1.5rem;">เลือกความหมายที่ถูกต้องให้ทันก่อนเวลาหมด!</p>
-        <div id="rush-opts" class="quiz-options"></div>
+      <div class="rush-prompt">
+        <div class="rush-word" id="rush-word-text">これ</div>
+        <div style="margin-top: 8px;">
+          <button class="btn-voice" onclick="speakText(document.getElementById('rush-word-text').textContent)">🔊 ฟังเสียง (ชาย)</button>
+        </div>
       </div>
 
-      <div id="rush-over" style="display:none; padding:2rem 0;">
-        <h2 style="font-size:2rem; color:#f87171; margin-bottom:1rem;">หมดเวลา! 💥</h2>
-        <p style="font-size:1.2rem; margin-bottom:1.5rem;">คุณทำคะแนนได้: <strong id="rush-final" style="color:#34d399;">0</strong> คะแนน</p>
-        <button class="quiz-next-btn" onclick="startRush()">เล่นใหม่อีกรอบ 🔄</button>
+      <div class="quiz-options-grid" id="rush-opts-box" style="margin-top: 1.5rem;">
+        <!-- dynamic -->
       </div>
     </div>
   </section>
 
-  <!-- TAB 4: CHEAT SHEET -->
+  <!-- ==========================================
+       TAB: CHEAT SHEET (สรุปกฎเหล็ก)
+       ========================================== -->
   <section id="tab-sheet" class="tab-pane">
-    <div style="margin-bottom:1.5rem;">
-      <h2 style="font-size:1.5rem; margin-bottom:0.4rem;">📌 สรุปเก็งสอบจุดตาย (รวบรวมจากเอกสารทั้ง 14 ไฟล์)</h2>
-      <p style="color:var(--text-muted); font-size:0.9rem;">จุดที่คนเรียนมักสับสน และอาจารย์มักนำมาออกสอบบ่อยที่สุด</p>
-    </div>
+    <div class="surface-panel">
+      <div class="section-meta">
+        <div>
+          <h2>สรุปกฎเหล็กและจุดออกสอบบ่อย (Cheat Sheets)</h2>
+          <p>รวมสาระสำคัญ 4 ด้านที่ออกข้อสอบทุกครั้ง จากเอกสารทั้ง 14 ไฟล์</p>
+        </div>
+      </div>
 
-    <div class="sheet-grid" id="sheet-container"></div>
+      <div class="sheet-grid" id="sheet-grid-container">
+        <!-- dynamic cards -->
+      </div>
+    </div>
   </section>
+
 </main>
 
+<footer class="app-footer">
+  <div>ADA Japanese Master &bull; ออกแบบเพื่อการเรียนรู้และจดจำง่าย &bull; เสียงภาษาญี่ปุ่นผู้ชายความเร็ว 0.9x</div>
+</footer>
+
 <script>
+// Data payloads
+const personaData = [{"id": 1, "name": "ミラー (Miller)", "kanji_name": "ミラーさん", "age": 28, "age_jp": "にじゅうはっさい (28歳)", "job": "会社員 (พนักงานบริษัท)", "job_jp": "かいしゃいん", "org": "IMC (บริษัทคอมพิวเตอร์)", "org_jp": "IMCの しゃいん", "avatar_bg": "linear-gradient(135deg, #1e3a8a, #3b82f6)", "avatar_icon": "💼", "desc": "ชายชาวอเมริกัน วัยทำงาน สวมสูทผูกเนคไท ถือกระเป๋าเอกสาร IMC", "question": "จากข้อมูลในบัตรประจำตัว จงระบุข้อมูล 'ชื่อ - อายุ - อาชีพ' ให้ถูกต้องตามหลักไวยากรณ์บทที่ 1", "options": ["ミラーさんは 28さい (にじゅうはっさい) です。IMCの しゃいんです。", "ミラーさんは 20さい (はたち) です。ぎんこういんです。", "ミラーさんは 28さい (にじゅうはちさい) です。いしゃです。", "ミラーさんは 18さい (じゅうはっさい) です。がくせいです。"], "answer": 0, "breakdown": {"name_rule": "ミラーさん (Miraa-san) ชาวอเมริกัน", "age_rule": "28 ปี = にじゅうはっさい (nijyuuhassai) เสียง 8 ลงท้ายด้วย はっさい", "job_rule": "IMCの しゃいん (IMC no shain) พนักงานของบริษัท IMC ใช้คำช่วย の เชื่อมองค์กรกับตำแหน่ง", "formula": "คำนาม1 は คำนาม2 (อายุ/อาชีพ) です。"}}, {"id": 2, "name": "田中 (Tanaka)", "kanji_name": "田中さん", "age": 20, "age_jp": "はたち (20歳 - คำยกเว้นพิเศษ!)", "job": "学生 (นักศึกษามหาวิทยาลัย)", "job_jp": "だいがくの がくせい", "org": "さくら大学 (มหาวิทยาลัยซากุระ)", "org_jp": "さくらだいがく", "avatar_bg": "linear-gradient(135deg, #065f46, #10b981)", "avatar_icon": "🎓", "desc": "หนุ่มญี่ปุ่นสวมชุดนักศึกษา สะพายเป้ ถือสมุดโน้ตและหนังสือภาษาญี่ปุ่น", "question": "ข้อใดบอกอายุ 20 ปี และสถานะอาชีพของทานากะได้ถูกต้องตามกฎข้อยกเว้น?", "options": ["田中さんは にじゅうさいです。せんせいです。", "田中さんは はたちです。さくらだいがくの がくせいです。", "田中さんは はたちさいです。かいしゃいんです。", "田中さんは にじゅっさいです。ぎんこういんです。"], "answer": 1, "breakdown": {"name_rule": "田中さん (Tanaka-san) หนุ่มชาวญี่ปุ่น", "age_rule": "★ จุดตายข้อสอบ: 20 ปี ออกเสียงว่า はたち (hatachi) ห้ามเติม さい และห้ามอ่าน ni-juu-sai", "job_rule": "さくらだいがくの がくせい (Sakura daigaku no gakusei) นักศึกษามหาวิทยาลัยซากุระ", "formula": "อายุ 20 ปี = はたち (hatachi) เท่านั้น"}}, {"id": 3, "name": "山田 (Yamada)", "kanji_name": "山田さん", "age": 38, "age_jp": "さんじゅうはっさい (38歳)", "job": "銀行員 (พนักงานธนาคาร)", "job_jp": "ぎんこういん", "org": "あおぞら銀行", "org_jp": "ぎんこうの しゃいん", "avatar_bg": "linear-gradient(135deg, #3730a3, #6366f1)", "avatar_icon": "🏦", "desc": "พนักงานหนุ่มใส่แว่น ยืนหน้าเคาน์เตอร์ธนาคาร มีตราสัญลักษณ์ธนาคารติดที่หน้าอก", "question": "ข้อใดระบุชื่อ อายุ (38 ปี) และอาชีพของยามาดะได้ถูกต้อง?", "options": ["山田さんは さんじゅうはちさいです。いしゃです。", "山田さんは さんじゅうはっさいです。ぎんこういんです。", "山田さんは さんじゅうはっさいです。けんきゅうしゃです。", "山田さんは よんじゅうさいです。ぎんこういんです。"], "answer": 1, "breakdown": {"name_rule": "山田さん (Yamada-san) สุภาพบุรุษชาวญี่ปุ่น", "age_rule": "38 ปี = さんじゅうはっさい (san-jyuu-hassai) 8 ขวบคือ はっさい พอมี 30 นำหน้าก็ยังคงเป็น はっさい", "job_rule": "ぎんこういん (ginkouin) พนักงานธนาคาร ทำงานที่ ぎんこう (ธนาคาร)", "formula": "อาชีพพนักงานธนาคาร = ぎんこういん"}}, {"id": 4, "name": "サントス (Santos)", "kanji_name": "サントスさん", "age": 35, "age_jp": "さんじゅうごさい (35歳)", "job": "研究者 (นักวิจัย)", "job_jp": "けんきゅうしゃ", "org": "ブラジル (บราซิล)", "org_jp": "ブラジルじん", "avatar_bg": "linear-gradient(135deg, #854d0e, #eab308)", "avatar_icon": "🔬", "desc": "นักวิจัยชาวบราซิล สวมเสื้อกาวน์สีขาว ถือหลอดทดลองในห้องแล็บสถาบันวิทยาศาสตร์", "question": "ข้อใดสรุปชื่อ สัญชาติ อายุ (35 ปี) และอาชีพของซานโตสได้ตรงตามไวยากรณ์?", "options": ["サントスさんは ブラジルじんです。35さい (さんじゅうごさい) です。けんきゅうしゃです。", "サントスさんは アメリカじんです。35さいです。きょうしです。", "サントスさんは タイじんです。30さいです。かいしゃいんです。", "サントスさんは ブラジルじんです。25さいです。がくせいです。"], "answer": 0, "breakdown": {"name_rule": "サントスさん (Santosu-san) เขียนด้วยคะตะกะนะเพราะเป็นชื่อต่างชาติ", "age_rule": "35 ปี = さんじゅうごさい (san-jyuu-go-sai)", "job_rule": "けんきゅうしゃ (kenkyuusha) นักวิจัย", "formula": "ชื่อ + は + สัญชาติ + です。 อายุ + です。 อาชีพ + です。"}}, {"id": 5, "name": "ワン (Wang)", "kanji_name": "ワンさん", "age": 41, "age_jp": "よんじゅういっさい (41歳)", "job": "医者 (คุณหมอ)", "job_jp": "いしゃ", "org": "神戸病院 (โรงพยาบาลโกเบ)", "org_jp": "びょういんの いしゃ", "avatar_bg": "linear-gradient(135deg, #0f766e, #14b8a6)", "avatar_icon": "🩺", "desc": "คุณหมอชาวจีนสวมเสื้อคลุมแพทย์ มีหูฟังตรวจโรคพาดคอ ทำงานที่โรงพยาบาล (びょういん)", "question": "ข้อใดระบุอายุ 41 ปี และอาชีพของหวังซังได้ถูกต้อง?", "options": ["ワンさんは よんじゅういちさいです。かいしゃいんです。", "ワンさんは よんじゅういっさいです。こうべびょういんの いしゃです。", "ワンさんは よんじゅうさいです。ぎんこういんです。", "ワンさんは しじゅういっさいです。がくせいです。"], "answer": 1, "breakdown": {"name_rule": "ワンさん (Wan-san) ชาวจีน", "age_rule": "41 ปี = よんじゅういっさい (yon-jyuu-issai) เลข 1 ลงท้ายเสียงซกอุอง いっさい", "job_rule": "いしゃ (isha) คุณหมอ ทำงานที่ びょういん (byouin โรงพยาบาล)", "formula": "สถานที่ + の + อาชีพ = こうべびょういんの いしゃ (หมอของโรงพยาบาลโกเบ)"}}, {"id": 6, "name": "鈴木 (Suzuki)", "kanji_name": "鈴木さん", "age": 45, "age_jp": "よんじゅうごさい (45歳)", "job": "日本語の先生 (อาจารย์สอนภาษาญี่ปุ่น)", "job_jp": "にほんごの せんせい", "org": "さくら大学", "org_jp": "だいがくの きょうし", "avatar_bg": "linear-gradient(135deg, #431407, #ea580c)", "avatar_icon": "📚", "desc": "อาจารย์ชาวญี่ปุ่นยืนหน้ากระดานดำ ถือชอล์กและหนังสือไวยากรณ์บทที่ 1-2", "question": "อาจารย์ซูซูกิ อายุ 45 ปี สอนวิชาภาษาญี่ปุ่น ข้อใดอธิบายบุคคลนี้ถูกต้องที่สุด?", "options": ["鈴木さんは よんじゅうごさいです。にほんごの せんせいです。", "鈴木さんは よんじゅうごさいです。えいごの せんせいです。", "鈴木さんは ごじゅうさいです。かいしゃいんです。", "鈴木さんは よんじゅうごさいです。だいがくの がくせいです。"], "answer": 0, "breakdown": {"name_rule": "鈴木さん (Suzuki-san) นามสกุลคนญี่ปุ่นยอดนิยม", "age_rule": "45 ปี = よんじゅうごさい (yon-jyuu-go-sai)", "job_rule": "にほんごの せんせい (nihongo no sensei) อาจารย์สอนภาษาญี่ปุ่น (ใช้ の ขยายวิชา)", "formula": "วิชา + の + せんせい = อาจารย์ประจำวิชานั้น"}}, {"id": 7, "name": "タワポン (Thawaphon)", "kanji_name": "タワポンさん", "age": 19, "age_jp": "じゅうきゅうさい (19歳)", "job": "学生 (นักเรียนไทย)", "job_jp": "タイの がくせい", "org": "タイ人 (คนไทย)", "org_jp": "タイじん", "avatar_bg": "linear-gradient(135deg, #1e1b4b, #4338ca)", "avatar_icon": "🎒", "desc": "นักศึกษาหนุ่มชาวไทย ถือพาสปอร์ตไทยและกระเป๋าเป้เตรียมเข้าเรียนมหาวิทยาลัย", "question": "ทวาพรเป็นคนไทย อายุ 19 ปี เป็นนักศึกษา ข้อใดแต่งประโยคได้ถูกต้องสมบูรณ์?", "options": ["タワポンさんは タイ人です。19さい (じゅうきゅうさい) です。がくせいです。", "タワポンさんは 日本人です。20さい (はたち) です。かいしゃいんです。", "タワポンさんは タイ人です。19さい (じゅうくさい) です。せんせいです。", "タワポンさんは タイ人じゃありません。18さいです。いしゃです。"], "answer": 0, "breakdown": {"name_rule": "タワポンさん (Tawapon-san) ตัวละครคนไทยในตำรา", "age_rule": "19 ปี = じゅうきゅうさい (jyuu-kyuu-sai) [ไม่อ่าน jyuu-ku-sai ในเรื่องอายุ]", "job_rule": "タイ人 (taijin) + がくせい (gakusei)", "formula": "การระบุสัญชาติ: ประเทศ + 人 (じん)"}}, {"id": 8, "name": "エリー (Ellie)", "kanji_name": "エリーちゃん", "age": 8, "age_jp": "はっさい (8歳 - คำควบเสียงสั้น!)", "job": "子供 / 小学生 (เด็กนักเรียนประถม)", "job_jp": "こども / がくせい", "org": "イギリス (อังกฤษ)", "org_jp": "イギリスじん", "avatar_bg": "linear-gradient(135deg, #701a75, #c026d3)", "avatar_icon": "👧", "desc": "เด็กหญิงผมบลอนด์วัย 8 ขวบ สวมหมวกนักเรียนประถมสีเหลือง ยิ้มร่าเริง", "question": "น้องเอลลี่เป็นเด็กผู้หญิงอายุ 8 ขวบ ข้อใดใช้คำต่อท้ายชื่อและบอกอายุได้ถูกต้องตามบทที่ 1?", "options": ["エリーさんは はちさいです。せんせいです。", "エリーちゃんは はっさいです。がくせいです。", "エリーさんは はちさいです。かいしゃいんです。", "エリーちゃんは はちさいです。いしゃです。"], "answer": 1, "breakdown": {"name_rule": "～ちゃん (chan) ใช้ต่อท้ายชื่อเด็กผู้หญิงด้วยความเอ็นดู", "age_rule": "★ จุดตาย: 8 ขวบ = はっさい (hassai) เสียงกัก เป็น はちさい ถือว่าผิดแกรมม่า", "job_rule": "がくせい (gakusei) นักเรียน", "formula": "ชื่อเด็ก + ちゃん + は + はっさいです。"}}, {"id": 9, "name": "ナパー (Napa)", "kanji_name": "ナパーさん", "age": 31, "age_jp": "さんじゅういっさい (31歳)", "job": "英語の先生 (ครูสอนภาษาอังกฤษ)", "job_jp": "えいごの せんせい / きょうし", "org": "タイ人 (คนไทย)", "org_jp": "タイじん", "avatar_bg": "linear-gradient(135deg, #134e4a, #0d9488)", "avatar_icon": "👩‍🏫", "desc": "อาจารย์หญิงชาวไทย สวมแว่นตา ถือหนังสือภาษาอังกฤษ (えいごのほん)", "question": "คุณนภาเป็นคนไทย อายุ 31 ปี เป็นอาจารย์สอนภาษาอังกฤษ ข้อใดถูกต้อง?", "options": ["ナパーさんは タイ人です。31さい (さんじゅういっさい) です。えいごの せんせいです。", "ナパーさんは 日本人です。31さい (さんじゅういちさい) です。いしゃです。", "ナパーさんは タイ人です。30さいです。ぎんこういんです。", "ナパーさんは アメリカ人です。31さいです。がくせいです。"], "answer": 0, "breakdown": {"name_rule": "ナパーさん (Napaa-san)", "age_rule": "31 ปี = さんじゅういっさい (san-jyuu-issai) เลข 1 ลงท้ายควบเป็น いっさい", "job_rule": "えいごの せんせい (eigo no sensei) อาจารย์ภาษาอังกฤษ", "formula": "คำนาม1 (ภาษา) の คำนาม2 (อาจารย์)"}}, {"id": 10, "name": "シュミット (Schmidt)", "kanji_name": "シュミットさん", "age": 1, "age_jp": "いっさい (1歳 - เสียงสั้นข้อยกเว้น!)", "job": "赤ちゃん (ทารกน้อย / ลูกของคุณชมิดต์)", "job_jp": "あかちゃん", "org": "ドイツ (เยอรมัน)", "org_jp": "ドイツじん", "avatar_bg": "linear-gradient(135deg, #312e81, #4f46e5)", "avatar_icon": "👶", "desc": "เด็กทารกวัย 1 ขวบ นั่งเล่นของเล่นลูกบอล มีเค้กวันเกิดเลข 1 วางอยู่ข้างๆ", "question": "หนูน้อยคนนี้อายุ 1 ขวบ ในภาษาญี่ปุ่นข้อใดอ่านออกเสียงอายุ 1 ขวบได้ถูกต้องตามกฎ?", "options": ["いちさい (ichi-sai)", "いっさい (issai)", "ひとさい (hito-sai)", "わんさい (one-sai)"], "answer": 1, "breakdown": {"name_rule": "シュミットくん / ちゃん", "age_rule": "★ กฎเหล็กอายุ: 1 ขวบ ต้องอ่านว่า いっさい (issai) ห้ามอ่าน ichi-sai เด็ดขาด", "job_rule": "ทารก / เด็กเล็ก", "formula": "1 ขวบ = いっさい (issai) / 8 ขวบ = はっさい (hassai) / 20 ปี = はたち (hatachi)"}}];
 const quizData = [{"id": 1, "cat": "การทักทาย & มารยาท", "question": "สวัสดีตอนเช้า (แบบสุภาพ) พูดว่าอย่างไร?", "options": ["おはようございます", "こんにちは", "こんばんは", "おやすみなさい"], "answer": 0, "hint": "ohayou gozaimasu ใช้กับผู้ใหญ่หรือในที่ทำงานตอนเช้า", "exam_tip": "จำคำลงท้าย ございます (gozaimasu) = สุภาพ ถ้า おはよう เฉยๆ ใช้กับเพื่อนสนิท!"}, {"id": 2, "cat": "การทักทาย & มารยาท", "question": "เมื่อต้องการพูดว่า 'ขอโทษ / ขออนุญาต / รบกวนถามหน่อย' ต้องใช้คำไหน?", "options": ["ありがとう", "すみません", "どうも", "さようなら"], "answer": 1, "hint": "sumimasen เป็นคำสารพัดประโยชน์ ใช้เรียกพนักงาน ขอทาง หรือขอโทษ", "exam_tip": "ออกสอบบ่อยมาก! すみません ใช้เรียกพนักงานในร้านอาหารหรือก่อนเริ่มถามทางได้ด้วย"}, {"id": 3, "cat": "การทักทาย & มารยาท", "question": "คำว่า 'ยินดีที่ได้รู้จัก (เมื่อเจอกันครั้งแรก)' ใช้คำว่าอะไร?", "options": ["はじめまして", "どうぞよろしく", "じゃ、また", "いただきます"], "answer": 0, "hint": "hajimemashite มาจากคำว่า 'เริ่มต้น' (เป็นครั้งแรก)", "exam_tip": "โครงสร้างแนะนำตัว: はじめまして (ยินดีที่ได้รู้จัก) -> แนะนำตัว -> どうぞよろしくおねがいします (ฝากเนื้อฝากตัว)"}, {"id": 4, "cat": "การทักทาย & มารยาท", "question": "ก่อนเริ่มรับประทานอาหาร คนญี่ปุ่นจะพูดว่าอะไร?", "options": ["ごちそうさまでした", "いただきます", "いらっしゃいませ", "おじゃまします"], "answer": 1, "hint": "itadakimasu แปลตรงตัวคือ ขอรับประทานด้วยความขอบคุณ", "exam_tip": "คู่ตรงข้าม: กินเสร็จพูด ごちそうさまでした (ขอบคุณสำหรับอาหาร)"}, {"id": 5, "cat": "บทที่ 1: แนะนำตัว & สัญชาติ", "question": "ประโยค 'ฉันเป็นคนไทย' ข้อใดถูกต้อง?", "options": ["わたしはタイじんです。", "わたしがタイじんです。", "わたしもタイじんです。", "わたしのタイじんです。"], "answer": 0, "hint": "ประธาน + は (อ่านว่า wa) + คำนาม + です", "exam_tip": "คำช่วย は เมื่อทำหน้าที่ชี้ประธานของประโยค ให้ออกเสียงว่า 'wa' เสมอ ห้ามอ่าน 'ha'"}, {"id": 6, "cat": "บทที่ 1: แนะนำตัว & สัญชาติ", "question": "A: 'คุณทานากะเป็นคนญี่ปุ่น' -> B: 'ฉัน [ ก็ ] เป็นคนญี่ปุ่นเหมือนกัน' ต้องใช้คำช่วยใดแทน は?", "options": ["も (mo)", "の (no)", "か (ka)", "と (to)"], "answer": 0, "hint": "も แปลว่า 'ก็...เหมือนกัน/ด้วย'", "exam_tip": "ข้อสอบหลอกบ่อย: เมื่อประธานทำกริยาหรือมีสถานะเหมือนคนก่อนหน้า ให้เปลี่ยน は เป็น も ทันที!"}, {"id": 7, "cat": "บทที่ 1: แนะนำตัว & สัญชาติ", "question": "รูปปฏิเสธสุภาพของ です (เป็น/คือ) ในประโยค 'ฉันไม่ใช่นักเรียน' คือข้อใด?", "options": ["じゃありません (ではありません)", "です", "でした", "じゃありませんでした"], "answer": 0, "hint": "dewa arimasen หรือ ja arimasen = ไม่ใช่ / ไม่ได้เป็น", "exam_tip": "わたしはがくせいじゃありません = ฉันไม่ใช่นักเรียน (รูปสุภาพทางการคือ ではありません)"}, {"id": 8, "cat": "บทที่ 1: แนะนำตัว & สัญชาติ", "question": "คำว่า 'ใคร' ในรูปสุภาพที่ใช้ถามผู้ใหญ่ (เช่น ท่านนั้นคือใคร) คือคำว่าอะไร?", "options": ["だれ (dare)", "どなた (donata)", "どこ (doko)", "どれ (dore)"], "answer": 1, "hint": "donata เป็นรูปสุภาพยกย่องของ dare", "exam_tip": "あのひとは だれですか (คนนั้นใคร) VS あのかたは どなたですか (ท่านนั้นคือใคร - สุภาพมาก)"}, {"id": 9, "cat": "บทที่ 1: แนะนำตัว & สัญชาติ", "question": "คำถาม 'คุณอายุเท่าไหร่' (รูปทั่วไป / รูปสุภาพ) ใช้ข้อใดถูกต้อง?", "options": ["なんさい (おいくつ)", "なんじ (なんにん)", "なんようび", "なんがつ"], "answer": 0, "hint": "nansai = กี่ขวบ/กี่ปี, oikutsu = สุภาพกว่า", "exam_tip": "จำคู่: อายุ 1 ขวบ = いっさい (issai), 20 ปี = はたち (hatachi - ข้อยกเว้นออกสอบ 100%)"}, {"id": 10, "cat": "บทที่ 2: สิ่งของ & โคโสะอะโดะ", "question": "การชี้สิ่งของ 'นี่ (ใกล้ตัวผู้พูด)', 'นั่น (ใกล้ผู้ฟัง)', 'โน่น (ไกลทั้งคู่)' คือข้อใดเรียงตามลำดับ?", "options": ["これ - それ - あれ", "ここ - そこ - あそこ", "この - その - あの", "どれ - どこ - どの"], "answer": 0, "hint": "kore, sore, are ตามด้วยคำช่วย は ได้ทันที (เช่น これは何ですか)", "exam_tip": "กฎเหล็ก: これ/それ/あれ + は (ไม่ต้องมีคำนามต่อท้าย) แต่ この/その/あの + คำนามเสมอ!"}, {"id": 11, "cat": "บทที่ 2: สิ่งของ & โคโสะอะโดะ", "question": "ถ้าต้องการพูดว่า 'หนังสือเล่มนี้เป็นของฉัน' ต้องแต่งอย่างไร?", "options": ["このほんは わたしのです。", "これほんは わたしのです。", "そのほんは わたしです。", "あのほんは わたしにです。"], "answer": 0, "hint": "この + นาม (ほん) และ の ท้ายประโยคแทนการละคำนาม (わたしの = ของฉัน)", "exam_tip": "ออกสอบ 100%! ห้ามพูด これほん เด็ดขาด ต้องเป็น このほん เท่านั้น"}, {"id": 12, "cat": "บทที่ 2: สิ่งของ & โคโสะอะโดะ", "question": "คำว่า 'พจนานุกรม' ภาษาญี่ปุ่นคือคำว่าอะไร?", "options": ["じしょ (jisho)", "ほん (hon)", "ざっし (zasshi)", "しんぶん (shinbun)"], "answer": 0, "hint": "คันจิคือ 辞書 (jisho)", "exam_tip": "กลุ่มคำศัพท์การเรียน: ほん (หนังสือ), じしょ (พจนานุกรม), ざっし (นิตยสาร), しんぶん (หนังสือพิมพ์)"}, {"id": 13, "cat": "บทที่ 2: สิ่งของ & โคโสะอะโดะ", "question": "คำว่า 'รถยนต์' และ 'ร่ม' คือคำใด?", "options": ["くるま (kuruma) / かさ (kasa)", "くつ (kutsu) / とけい (tokei)", "かぎ (kagi) / かばん (kaban)", "てちょう (techou) / めいし (meishi)"], "answer": 0, "hint": "kuruma = รถ, kasa = ร่ม", "exam_tip": "ระวังจำสับสน: かさ (kasa = ร่ม) กับ かぎ (kagi = กุญแจ)"}, {"id": 14, "cat": "บทที่ 2: สิ่งของ & โคโสะอะโดะ", "question": "คำว่า 'ของใคร' ในประโยค 'กุญแจนี้ของใคร?' คือข้อใด?", "options": ["だれの (dare no)", "どれの (dore no)", "なんの (nan no)", "どความ (doko no)"], "answer": 0, "hint": "dare (ใคร) + no (ของ) = ของใคร", "exam_tip": "このかぎは だれのですか = กุญแจนี้ของใคร? ตอบ: わたしのです (ของฉันครับ)"}, {"id": 15, "cat": "บทที่ 3: สถานที่ & ราคา", "question": "ถามหาสถานที่ 'ห้องน้ำอยู่ที่ไหน' ประโยคใดถูกต้อง?", "options": ["おてあらい (トイレ) は どこですか。", "トイレは なんさいですか。", "トイレは これですか。", "トイレは だれですか。"], "answer": 0, "hint": "doko แปลว่า ที่ไหน", "exam_tip": "รูปสุภาพของ どこ คือ どちら (dochira) -> おてあらいは どちらですか"}, {"id": 16, "cat": "บทที่ 3: สถานที่ & ราคา", "question": "ชี้สถานที่ 'ที่นี่ / ที่นั่น / ที่โน่น' คือข้อใด?", "options": ["ここ / そこ / あそこ", "これ / それ / あれ", "この / その / あの", "こちら / そちら / あちら"], "answer": 0, "hint": "koko (ใกล้ตัวผู้พูด), soko (ใกล้ผู้ฟัง), asoko (ไกลทั้งสองคน)", "exam_tip": "รูปสุภาพบอกทิศทาง/สถานที่: ここ -> こちら, そこ -> そちら, あそこ -> あちら, どこ -> どちら"}, {"id": 17, "cat": "บทที่ 3: สถานที่ & ราคา", "question": "การถามราคา '(สิ่งนี้) ราคาเท่าไหร่' ภาษาญี่ปุ่นพูดว่าอย่างไร?", "options": ["いくらですか (ikura desu ka)", "なんじですか", "いくつのですか", "なんえんですか"], "answer": 0, "hint": "ikura = ราคาเท่าไหร่", "exam_tip": "จำคำศัพท์สกุลเงิน: 円 (えん / en) เช่น 500 เยน = ごひゃくえん (gohyaku-en)"}, {"id": 18, "cat": "บทที่ 3: สถานที่ & ราคา", "question": "เลข '300', '600', '800' ในภาษาญี่ปุ่นมีเสียงเปลี่ยน (เสียงควบ/ขุ่น) ข้อใดถูกต้อง?", "options": ["さんびゃく / ろっぴゃく / はっぴゃく", "さんひゃく / ろくひゃく / はちひゃく", "さんぴゃく / ろっびゃく / はちびゃく", "みっひゃく / むっぴゃく / やっぴゃく"], "answer": 0, "hint": "百 (hyaku) เจอเลข 3 เป็น -byaku, เจอเลข 6 และ 8 เป็น -ppyaku", "exam_tip": "ข้อสอบชอบออกเสียงเปลี่ยนมากที่สุด! 300=sanbyaku, 600=roppyaku, 800=happyaku"}, {"id": 19, "cat": "บทที่ 3: สถานที่ & ราคา", "question": "เลข '3,000' และ '8,000' ออกเสียงพิเศษอย่างไร?", "options": ["さんぜん (sanzen) / はっせん (hassen)", "さんせん / はちせん", "みっせん / やっせん", "さんぜん / はちぜん"], "answer": 0, "hint": "千 (sen) เจอ 3 กลายเป็น -zen, เจอ 8 กลายเป็น -ssen", "exam_tip": "3,000 = さんぜん, 8,000 = はっせん ท่องให้ขึ้นใจ ออกข้อสอบชัวร์!"}, {"id": 20, "cat": "บทที่ 3: สถานที่ & ราคา", "question": "จำนวนเงิน '10,000 เยน' คนญี่ปุ่นใช้หน่วย 万 (man) ข้อใดอ่านถูกต้อง?", "options": ["いちまんえん (ichi-man en)", "じゅうせんえん", "ひゃくひゃくえん", "まんえん"], "answer": 0, "hint": "หลักหมื่นภาษาญี่ปุ่นคือ 万 (man) โดย 10,000 ต้องมี いち นำหน้าเสมอ", "exam_tip": "ภาษาญี่ปุ่นนับทีละหมื่น! 10,000 = いちまん (ห้ามพูดแค่ man เฉยๆ เหมือน sen)"}, {"id": 21, "cat": "ไวยากรณ์: ความชอบ & ความเกลียด", "question": "ประโยค 'ฉันชอบแตงโม' ต้องใช้คำช่วยใดชี้สิ่งที่เราชอบ?", "options": ["わたしは すいか [ が ] すきです。", "わたしは すいか [ を ] すきです。", "わたしは すいか [ に ] すきです。", "わたしは すいか [ で ] すきです。"], "answer": 0, "hint": "โครงสร้างคือ [คำนาม] が すきです", "exam_tip": "ระวังกับดักภาษาไทย! คนไทยชอบคิดว่าแตงโมเป็นกรรมแล้วใส่ を แต่ すき เป็นคำคุณศัพท์ ต้องใช้ が เสมอ!"}, {"id": 22, "cat": "ไวยากรณ์: ความชอบ & ความเกลียด", "question": "ประโยคปฏิเสธ 'ฉันไม่ชอบ...' พูดว่าอย่างไร?", "options": ["～が すきじゃありません (すきではありません)", "～が すきくないです", "～を すきじゃないです", "～が すきでした"], "answer": 0, "hint": "suki เป็น Na-adjective ปฏิเสธเป็น ja arimasen", "exam_tip": "すきじゃありません หรือ すきではありません (ในข้อสอบมักใช้ dewa arimasen แบบทางการ)"}, {"id": 23, "cat": "ระบบตัวอักษร: ฮิรางานะ & คาตาคานะ", "question": "ตัวอักษรฮิรางานะเสียงพื้นฐานมีทั้งหมดกี่ตัว?", "options": ["46 ตัว", "44 ตัว", "50 ตัว", "48 ตัว"], "answer": 0, "hint": "ตารางโกจูอง (50 เสียง) ปัจจุบันใช้จริง 46 ตัว", "exam_tip": "ในสมุดโน้ตข้อสอบมีข้อนี้ตรงๆ! ฮิรางานะพื้นฐาน = 46 ตัว สระมี 5 เสียง (a i u e o)"}, {"id": 24, "cat": "ระบบตัวอักษร: ฮิรางานะ & คาตาคานะ", "question": "ตัว ち (chi) จัดอยู่ในวรรค (แถวพยัญชนะ) ใด?", "options": ["วรรค Ta (た・ち・つ・て・と)", "วรรค Sa (さ・し・す・せ・そ)", "วรรค Ka (か・き・く・け・こ)", "วรรค Na (な・に・ぬ・ね・の)"], "answer": 0, "hint": "ta chi tsu te to อยู่ในแถว T", "exam_tip": "ระวังตัวออกเสียงไม่ตรงวรรค: วรรค sa มี し (shi), วรรค ta มี ち (chi) และ つ (tsu)"}, {"id": 25, "cat": "ระบบตัวอักษร: ฮิรางานะ & คาตาคานะ", "question": "ตัวอักษร 'คาตาคานะ' โดยทั่วไปใช้เขียนคำประเภทใด?", "options": ["คำยืมจากภาษาต่างประเทศ ชื่อคน/สถานที่ต่างประเทศ", "คำช่วยและคำลงท้ายกริยา", "ไวยากรณ์ดั้งเดิมของญี่ปุ่น", "คำคุณศัพท์แท้โบราณ"], "answer": 0, "hint": "เช่น コーヒー (กาแฟ), ケーキ (เค้ก), タイ (ไทย)", "exam_tip": "ฮิรางานะ = คำญี่ปุ่นแท้/คำช่วย, คาตาคานะ = คำทับศัพท์ภาษาต่างประเทศ, คันจิ = คำนาม/รากศัพท์กริยา"}, {"id": 26, "cat": "ระบบตัวอักษร: ฮิรางานะ & คาตาคานะ", "question": "สัญลักษณ์ขีดแนวนอนยาว 'ー' ในอักษรคาตาคานะ (เช่น ケーキ, コーヒー) มีหน้าที่อะไร?", "options": ["ลากเสียงยาว (สระเสียงยาว)", "ทำเป็นเสียงกัก (促音)", "เป็นเครื่องหมายวรรคตอน", "เปลี่ยนเสียงเป็นเสียงขุ่น"], "answer": 0, "hint": "Chouon (長音) เครื่องหมายเสียงยาว", "exam_tip": "ケーキ อ่านว่า keeki (ไม่ใช่ เคคิ), カード อ่านว่า kaado สัญลักษณ์ ー ยืดเสียงสระข้างหน้าให้ยาวขึ้น"}, {"id": 27, "cat": "ระบบตัวอักษร: ฮิรางานะ & คาตาคานะ", "question": "ตัว つ ตัวเล็ก (っ / ッ) เรียกว่า โซคุอง (Sokuon) ทำหน้าที่อะไรในการออกเสียง?", "options": ["เสียงสะกด/เสียงหยุดชะงัก (กักเสียง 1 จังหวะ)", "ยืดเสียงสระให้ยาวขึ้น", "เปลี่ยนเสียงเป็นสระ O", "ออกเสียงเป็นตัว N เสมอ"], "answer": 0, "hint": "เช่น ざっし (za-s-shi), きっぷ (ki-p-pu)", "exam_tip": "เวลาเจอตัว っ เล็ก ให้หยุดหายใจ 1 จังหวะ และซ้ำพยัญชนะตัวถัดไปในภาษาอังกฤษ เช่น kitte, zasshi"}, {"id": 28, "cat": "คันจิ: วันประจำสัปดาห์ & ธรรมชาติ", "question": "คันจิ 'วันจันทร์' และ 'วันอาทิตย์' คือตัวใดคู่กัน?", "options": ["月曜日 (getsu) / 日曜日 (nichi)", "火曜日 (ka) / 水曜日 (sui)", "木曜日 (moku) / 金曜日 (kin)", "土曜日 (do) / 日曜日 (nichi)"], "answer": 0, "hint": "月 = พระจันทร์ (จันทร์), 日 = พระอาทิตย์ (อาทิตย์)", "exam_tip": "เทคนิคจำ 7 วัน: 日(อาทิตย์-พระอาทิตย์), 月(จันทร์-ดวงจันทร์), 火(อังคาร-ไฟ), 水(พุธ-น้ำ), 木(พฤหัส-ไม้), 金(ศุกร์-ทอง/เงิน), 土(เสาร์-ดิน)"}, {"id": 29, "cat": "คันจิ: วันประจำสัปดาห์ & ธรรมชาติ", "question": "คันจิ '水' มีความหมายดั้งเดิมว่าอะไร และอ่านว่าอย่างไรเมื่ออยู่โดดๆ?", "options": ["น้ำ (みず / mizu)", "ไฟ (ひ / hi)", "ทอง (かね / kane)", "ดิน (つち / tsuchi)"], "answer": 0, "hint": "วันพุธ = 水曜日 (suiyoubi), น้ำเปล่า = お水 (omizu)", "exam_tip": "คันจิมี 2 เสียงอ่าน: อยู่ตัวเดียวอ่าน Kunyomi (みず), ผสมคำอ่าน Onyomi (すい เช่น 水曜日)"}, {"id": 30, "cat": "คันจิ: วันประจำสัปดาห์ & ธรรมชาติ", "question": "คำว่า 'คนไทย' (タイ人) ตัวคันจิ 人 ในที่นี้ทำหน้าที่เป็นคำต่อท้ายสัญชาติ ออกเสียงว่าอะไร?", "options": ["じん (jin)", "ひと (hito)", "にん (nin)", "びと (bito)"], "answer": 0, "hint": "ออกเสียง ไท-จิน (Tai-jin)", "exam_tip": "ตรงกับข้อสอบจริงในสมุดโน้ต! [ประเทศ] + 人 อ่านว่า じん (jin) แปลว่า คนชาตินั้นๆ"}];
 const flashcardsData = [{"jp": "一", "kana": "いち (ichi)", "th": "1 (หนึ่ง)", "mnem": "เส้นแนวนอน 1 เส้น", "cat": "คันจิตัวเลข"}, {"jp": "二", "kana": "に (ni)", "th": "2 (สอง)", "mnem": "เส้นแนวนอน 2 เส้นคู่กัน (บนสั้น ล่างยาว)", "cat": "คันจิตัวเลข"}, {"jp": "三", "kana": "さん (san)", "th": "3 (สาม)", "mnem": "เส้นแนวนอน 3 เส้น (กลางสั้นสุด ล่างยาวสุด)", "cat": "คันจิตัวเลข"}, {"jp": "四", "kana": "よん / し (yon / shi)", "th": "4 (สี่)", "mnem": "สี่เหลี่ยมมีผ้าม่านสองข้าง", "cat": "คันจิตัวเลข"}, {"jp": "五", "kana": "ご (go)", "th": "5 (ห้า)", "mnem": "มีขีดบนล่างและเส้นหักมุม", "cat": "คันจิตัวเลข"}, {"jp": "六", "kana": "ろく (roku)", "th": "6 (หก)", "mnem": "เหมือนคนยืนกางแขนและขา", "cat": "คันจิตัวเลข"}, {"jp": "七", "kana": "なな / しち (nana / shichi)", "th": "7 (เจ็ด)", "mnem": "เลข 7 คว่ำตัดเส้นขวาง", "cat": "คันจิตัวเลข"}, {"jp": "八", "kana": "はち (hachi)", "th": "8 (แปด)", "mnem": "ภูเขาไฟฟูจิกางออก 2 ข้าง", "cat": "คันจิตัวเลข"}, {"jp": "九", "kana": "きゅう / く (kyuu / ku)", "th": "9 (เก้า)", "mnem": "คนกำลังงอแขนเบ่งกล้าม", "cat": "คันจิตัวเลข"}, {"jp": "十", "kana": "じゅう (juu)", "th": "10 (สิบ)", "mnem": "เครื่องหมายบวก + รวมครบสิบ", "cat": "คันจิตัวเลข"}, {"jp": "百", "kana": "ひゃく (hyaku)", "th": "100 (ร้อย)", "mnem": "มีเลข 1 ขีดบน และ 白 (ขาว)", "cat": "คันจิตัวเลข"}, {"jp": "千", "kana": "せん (sen)", "th": "1,000 (พัน)", "mnem": "เลข 10 ที่มีขีดเฉียงด้านบน", "cat": "คันจิตัวเลข"}, {"jp": "万", "kana": "まん (man)", "th": "10,000 (หมื่น)", "mnem": "หน่วยหมื่นของญี่ปุ่น 10,000 = いちまん", "cat": "คันจิตัวเลข"}, {"jp": "日", "kana": "ひ / にち (hi / nichi)", "th": "วันอาทิตย์ / พระอาทิตย์ / วัน", "mnem": "รูปดวงอาทิตย์มีเส้นกลาง -> 日曜日", "cat": "คันจิวัน"}, {"jp": "月", "kana": "つき / げつ (tsuki / getsu)", "th": "วันจันทร์ / พระจันทร์ / เดือน", "mnem": "รูปพระจันทร์เสี้ยว -> 月曜日", "cat": "คันจิวัน"}, {"jp": "火", "kana": "ひ / か (hi / ka)", "th": "วันอังคาร / ไฟ", "mnem": "เปลวไฟพุ่งขึ้นสองข้าง -> 火曜日", "cat": "คันจิวัน"}, {"jp": "水", "kana": "みず / すい (mizu / sui)", "th": "วันพุธ / น้ำ", "mnem": "สายน้ำไหลกระเซ็น -> 水曜日", "cat": "คันจิวัน"}, {"jp": "木", "kana": "き / もく (ki / moku)", "th": "วันพฤหัสบดี / ต้นไม้", "mnem": "ต้นไม้มีกิ่งและราก -> 木曜日", "cat": "คันจิวัน"}, {"jp": "金", "kana": "かね / きん (kane / kin)", "th": "วันศุกร์ / เงิน / ทองคำ", "mnem": "หลังคาคุ้มก้อนทองคำใต้ดิน -> 金曜日", "cat": "คันจิวัน"}, {"jp": "土", "kana": "つち / ど (tsuchi / do)", "th": "วันเสาร์ / ดิน", "mnem": "พืชงอกขึ้นมาจากพื้นดิน -> 土曜日", "cat": "คันจิวัน"}, {"jp": "わたし", "kana": "watashi", "th": "ฉัน", "mnem": "คันจิคือ 私 ชี้ที่ตัวเอง", "cat": "บทที่ 1"}, {"jp": "あなた", "kana": "anata", "th": "คุณ", "mnem": "ใช้เรียกผู้ฟัง (ถ้าสนิทหรือรู้ชื่อควรเรียกชื่อ+ซัง)", "cat": "บทที่ 1"}, {"jp": "せんせい", "kana": "sensei", "th": "คุณครู / อาจารย์", "mnem": "คันจิคือ 先生 (ผู้เกิดก่อน)", "cat": "บทที่ 1"}, {"jp": "がくせい", "kana": "gakusei", "th": "นักเรียน / นักศึกษา", "mnem": "คันจิคือ 学生", "cat": "บทที่ 1"}, {"jp": "かいしゃいん", "kana": "kaishain", "th": "พนักงานบริษัท", "mnem": "かいしゃ (บริษัท) + いん (สมาชิก)", "cat": "บทที่ 1"}, {"jp": "ぎんこういん", "kana": "ginkouin", "th": "พนักงานธนาคาร", "mnem": "ぎんこう (ธนาคาร) + いん (สมาชิก)", "cat": "บทที่ 1"}, {"jp": "いしゃ", "kana": "isha", "th": "หมอ / แพทย์", "mnem": "ทำงานที่ びょういん (โรงพยาบาล)", "cat": "บทที่ 1"}, {"jp": "ほん", "kana": "hon", "th": "หนังสือ", "mnem": "คันจิคือ 本", "cat": "บทที่ 2"}, {"jp": "じしょ", "kana": "jisho", "th": "พจนานุกรม", "mnem": "เล่มหนาๆ ไว้เปิดหาความหมาย", "cat": "บทที่ 2"}, {"jp": "ざっし", "kana": "zasshi", "th": "นิตยสาร", "mnem": "มีตัว っ เล็กหยุด 1 จังหวะ", "cat": "บทที่ 2"}, {"jp": "しんぶん", "kana": "shinbun", "th": "หนังสือพิมพ์", "mnem": "ได้ยินข่าวใหม่ๆ (新聞)", "cat": "บทที่ 2"}, {"jp": "ノート", "kana": "nooto", "th": "สมุดโน้ต", "mnem": "ทับศัพท์ Note มีเสียงยาว ー", "cat": "บทที่ 2"}, {"jp": "えんぴつ", "kana": "enpitsu", "th": "ดินสอ", "mnem": "ดินสอไม้เหลาแหลมๆ", "cat": "บทที่ 2"}, {"jp": "ボールペン", "kana": "bo-rupen", "th": "ปากกาลูกลื่น", "mnem": "Ballpen มีขีดเสียงยาว", "cat": "บทที่ 2"}, {"jp": "かさ", "kana": "kasa", "th": "ร่ม", "mnem": "กางร่มกันฝนเวลาเดิน", "cat": "บทที่ 2"}, {"jp": "かぎ", "kana": "kagi", "th": "กุญแจ", "mnem": "กุญแจไขห้อง", "cat": "บทที่ 2"}, {"jp": "とけい", "kana": "tokei", "th": "นาฬิกา", "mnem": "เข็มนาฬิกาเดิน ติ๊กตอก", "cat": "บทที่ 2"}, {"jp": "くるま", "kana": "kuruma", "th": "รถยนต์", "mnem": "คันจิคือ 車 มีล้อ 4 ล้อ", "cat": "บทที่ 2"}, {"jp": "ここ / そこ / あそこ", "kana": "koko / soko / asoko", "th": "ที่นี่ / ที่นั่น / ที่โน่น", "mnem": "ใกล้ฉัน / ใกล้เธอ / ไกลทั้งคู่", "cat": "บทที่ 3"}, {"jp": "どこ", "kana": "doko", "th": "ที่ไหน", "mnem": "คำถามถามหาสถานที่", "cat": "บทที่ 3"}, {"jp": "きょうしつ", "kana": "kyoushitsu", "th": "ห้องเรียน", "mnem": "教室 ห้องที่มีการสอน", "cat": "บทที่ 3"}, {"jp": "しょくどう", "kana": "shokudou", "th": "โรงอาหาร", "mnem": "食堂 ห้องสำหรับทานอาหาร", "cat": "บทที่ 3"}, {"jp": "じむしょ", "kana": "jimusho", "th": "สำนักงาน / ออฟฟิศ", "mnem": "事務所 ห้องทำงานธุรการ", "cat": "บทที่ 3"}, {"jp": "おてあらい (トイレ)", "kana": "otearai (toire)", "th": "ห้องน้ำ", "mnem": "お手洗い ที่ล้างมือสุภาพ", "cat": "บทที่ 3"}, {"jp": "うけつけ", "kana": "uketsuke", "th": "แผนกต้อนรับ / ประชาสัมพันธ์", "mnem": "受付 เคาน์เตอร์ติดต่อแรก", "cat": "บทที่ 3"}, {"jp": "いくら", "kana": "ikura", "th": "ราคาเท่าไหร่", "mnem": "ถามราคา: これ は いくら ですか", "cat": "บทที่ 3"}];
 const speedData = [{"q": "これ", "a": "สิ่งนี้ (ใกล้ฉัน)", "w": ["สิ่งนั้น (ใกล้คุณ)", "สิ่งโน้น (ไกล)", "ที่นี่"]}, {"q": "それ", "a": "สิ่งนั้น (ใกล้คุณ)", "w": ["สิ่งนี้ (ใกล้ฉัน)", "สิ่งโน้น (ไกล)", "ที่นั่น"]}, {"q": "あれ", "a": "สิ่งโน้น (ไกลทั้งคู่)", "w": ["สิ่งนี้ (ใกล้ฉัน)", "สิ่งนั้น (ใกล้คุณ)", "ที่โน่น"]}, {"q": "ここ", "a": "ที่นี่ (ใกล้ฉัน)", "w": ["ที่นั่น (ใกล้คุณ)", "ที่โน่น (ไกล)", "ที่ไหน"]}, {"q": "そこ", "a": "ที่นั่น (ใกล้คุณ)", "w": ["ที่นี่ (ใกล้ฉัน)", "ที่โน่น (ไกล)", "ที่ไหน"]}, {"q": "あそこ", "a": "ที่โน่น (ไกลทั้งคู่)", "w": ["ที่นี่ (ใกล้ฉัน)", "ที่นั่น (ใกล้คุณ)", "ที่ไหน"]}, {"q": "ほん", "a": "หนังสือ", "w": ["พจนานุกรม", "นิตยสาร", "หนังสือพิมพ์"]}, {"q": "じしょ", "a": "พจนานุกรม", "w": ["หนังสือ", "สมุดโน้ต", "นามบัตร"]}, {"q": "ざっし", "a": "นิตยสาร", "w": ["หนังสือพิมพ์", "พจนานุกรม", "หนังสือ"]}, {"q": "しんぶん", "a": "หนังสือพิมพ์", "w": ["นิตยสาร", "หนังสือ", "กุญแจ"]}, {"q": "とけい", "a": "นาฬิกา", "w": ["กระเป๋า", "ร่ม", "รถยนต์"]}, {"q": "くるま", "a": "รถยนต์", "w": ["นาฬิกา", "รองเท้า", "โต๊ะ"]}, {"q": "くつ", "a": "รองเท้า", "w": ["ถุงเท้า", "เสื้อผ้า", "กระเป๋า"]}, {"q": "かさ", "a": "ร่ม", "w": ["กุญแจ", "กระเป๋า", "ปากกา"]}, {"q": "かぎ", "a": "กุญแจ", "w": ["ร่ม", "นาฬิกา", "นามบัตร"]}, {"q": "せんせい", "a": "ครู / อาจารย์", "w": ["นักเรียน", "หมอ", "พนักงานบริษัท"]}, {"q": "がくせい", "a": "นักเรียน / นักศึกษา", "w": ["ครู", "นักวิจัย", "พนักงานธนาคาร"]}, {"q": "いしゃ", "a": "หมอ", "w": ["ครู", "วิศวกร", "พนักงานออฟฟิศ"]}, {"q": "ぎんこう", "a": "ธนาคาร", "w": ["โรงพยาบาล", "มหาวิทยาลัย", "โรงเรียน"]}, {"q": "びょういん", "a": "โรงพยาบาล", "w": ["ธนาคาร", "บริษัท", "ห้องเรียน"]}, {"q": "だいがく", "a": "มหาวิทยาลัย", "w": ["โรงเรียน", "โรงพยาบาล", "สำนักงาน"]}, {"q": "すみません", "a": "ขอโทษ / ขออนุญาต", "w": ["ขอบคุณ", "ยินดีที่ได้รู้จัก", "ลาก่อน"]}, {"q": "ありがとう", "a": "ขอบคุณ", "w": ["ขอโทษ", "สวัสดี", "ยินดีต้อนรับ"]}, {"q": "なんさい", "a": "อายุเท่าไหร่", "w": ["กี่โมง", "กี่คน", "วันไหน"]}, {"q": "いくら", "a": "ราคาเท่าไหร่", "w": ["ที่ไหน", "ใคร", "อันไหน"]}];
-const summarySheets = [{"title": "1. สูตรลับการจำ โค-โสะ-อะ-โดะ (Ko-So-A-Do) จำครั้งเดียวไม่ลืม!", "content": "• โค (こ - Ko) = ใกล้ตัวคนพูด (เช่น これ สิ่งนี้ / ここ ที่นี่ / このほん หนังสือเล่มนี้)\n• โสะ (そ - So) = ใกล้ตัวคนฟัง (เช่น それ สิ่งนั้น / そこ ที่นั่น / そのほん หนังสือเล่มนั้น)\n• อะ (あ - A) = ไกลทั้งสองคน (เช่น あれ สิ่งโน้น / あそこ ที่โน่น / あのほん หนังสือเล่มโน้น)\n• โดะ (ど - Do) = คำถาม (เช่น どれ อันไหน / どこ ที่ไหน / どのほん เล่มไหน)\n\n★ ข้อควรระวังในห้องสอบ:\n- これ / それ / あれ + は [ห้ามตามด้วยคำนามเด็ดขาด!]\n- この / その / あの + [คำนามเสมอ] เช่น このペン (ปากกาด้ามนี้)"}, {"title": "2. จุดตายตัวเลข & ราคา (เสียงเปลี่ยนที่ชอบออกข้อสอบ)", "content": "★ ตัวเลขหลักร้อย (百 - hyaku):\n• 100 = ひゃく (hyaku)\n• 300 = さんびゃく (sanbyaku) [เสียง b!]\n• 600 = ろっぴゃく (roppyaku) [っ เล็ก + p!]\n• 800 = はっぴゃく (happyaku) [っ เล็ก + p!]\n\n★ ตัวเลขหลักพัน (千 - sen):\n• 1,000 = せん (sen) หรือ いっせん (issen)\n• 3,000 = さんぜん (sanzen) [เสียง z!]\n• 8,000 = はっせん (hassen) [っ เล็ก + s!]\n\n★ หลักหมื่น (万 - man):\n• 10,000 = いちまん (ichiman) [ต้องมี ichi เสมอ! ต่างจากไทยและอังกฤษ]\n\n★ อายุพิเศษ:\n• 1 ขวบ = いっさい (issai)\n• 8 ขวบ = はっさい (hassai)\n• 20 ปี = はたち (hatachi) [ไม่อ่าน ni-juu-sai!]"}, {"title": "3. 7 วันประจำสัปดาห์ & คันจิธรรมชาติ", "content": "曜日 (youbi) = วันประจำสัปดาห์\n1. 日よう日 (nichiyoubi) = วันอาทิตย์ (日 = พระอาทิตย์)\n2. 月よう日 (getsuyoubi) = วันจันทร์ (月 = พระจันทร์)\n3. 火よう日 (kayoubi) = วันอังคาร (火 = ไฟ)\n4. 水よう日 (suiyoubi) = วันพุธ (水 = น้ำ)\n5. 木よう日 (mokuyoubi) = วันพฤหัสบดี (木 = ไม้/ต้นไม้)\n6. 金よう日 (kinyoubi) = วันศุกร์ (金 = ทอง/เงิน お金)\n7. 土よう日 (doyoubi) = วันเสาร์ (土 = ดิน)\n\n★ จำลำดับ: อาทิตย์(แดด) -> จันทร์(เดือน) -> ไฟ -> น้ำ -> ไม้ -> ทอง -> ดิน"}, {"title": "4. ไวยากรณ์หลักบทที่ 1 - 3 (เก็งข้อสอบ 100%)", "content": "1. ประธาน + は + นาม + です (บอกเล่า) / じゃありません (ปฏิเสธ) / ですか (คำถาม)\n2. คำช่วย も (mo): ใช้แทน は แปลว่า 'ก็...ด้วย/เหมือนกัน'\n   ตัวอย่าง: わたしも タイ人です (ฉันก็เป็นคนไทยเหมือนกัน)\n3. คำช่วย の (no): เชื่อมนาม แสดงความเป็นเจ้าของ หรือขยายลักษณะ\n   ตัวอย่าง: にほんごの ほん (หนังสือภาษาญี่ปุ่น), わたしの かぎ (กุญแจของฉัน)\n4. ไวยากรณ์บอกชอบ/ไม่ชอบ:\n   [สิ่งของ/สิ่งที่เราชอบ] + が + すきです (ชอบ)\n   [สิ่งที่ไม่ชอบ] + が + すきじゃありません (ไม่ชอบ)\n   *ระวัง! คนไทยชอบเผลอใช้ を แต่ต้องใช้ が เสมอ\n5. การถามสถานที่:\n   [สถานที่] は どこですか (ห้องน้ำอยู่ที่ไหน)\n   รูปสุภาพ: おてあらいは どちらですか"}];
+const sheetData = [{"title": "1. สูตรลับการจำ โค-โสะ-อะ-โดะ (Ko-So-A-Do) จำครั้งเดียวไม่ลืม!", "content": "• โค (こ - Ko) = ใกล้ตัวคนพูด (เช่น これ สิ่งนี้ / ここ ที่นี่ / このほん หนังสือเล่มนี้)\n• โสะ (そ - So) = ใกล้ตัวคนฟัง (เช่น それ สิ่งนั้น / そこ ที่นั่น / そのほん หนังสือเล่มนั้น)\n• อะ (あ - A) = ไกลทั้งสองคน (เช่น あれ สิ่งโน้น / あそこ ที่โน่น / あのほん หนังสือเล่มโน้น)\n• โดะ (ど - Do) = คำถาม (เช่น どれ อันไหน / どこ ที่ไหน / どのほん เล่มไหน)\n\n★ ข้อควรระวังในห้องสอบ:\n- これ / それ / あれ + は [ห้ามตามด้วยคำนามเด็ดขาด!]\n- この / その / あの + [คำนามเสมอ] เช่น このペン (ปากกาด้ามนี้)"}, {"title": "2. จุดตายตัวเลข & ราคา (เสียงเปลี่ยนที่ชอบออกข้อสอบ)", "content": "★ ตัวเลขหลักร้อย (百 - hyaku):\n• 100 = ひゃく (hyaku)\n• 300 = さんびゃく (sanbyaku) [เสียง b!]\n• 600 = ろっぴゃく (roppyaku) [っ เล็ก + p!]\n• 800 = はっぴゃく (happyaku) [っ เล็ก + p!]\n\n★ ตัวเลขหลักพัน (千 - sen):\n• 1,000 = せん (sen) หรือ いっせん (issen)\n• 3,000 = さんぜん (sanzen) [เสียง z!]\n• 8,000 = はっせん (hassen) [っ เล็ก + s!]\n\n★ หลักหมื่น (万 - man):\n• 10,000 = いちまん (ichiman) [ต้องมี ichi เสมอ! ต่างจากไทยและอังกฤษ]\n\n★ อายุพิเศษ:\n• 1 ขวบ = いっさい (issai)\n• 8 ขวบ = はっさい (hassai)\n• 20 ปี = はたち (hatachi) [ไม่อ่าน ni-juu-sai!]"}, {"title": "3. 7 วันประจำสัปดาห์ & คันจิธรรมชาติ", "content": "曜日 (youbi) = วันประจำสัปดาห์\n1. 日よう日 (nichiyoubi) = วันอาทิตย์ (日 = พระอาทิตย์)\n2. 月よう日 (getsuyoubi) = วันจันทร์ (月 = พระจันทร์)\n3. 火よう日 (kayoubi) = วันอังคาร (火 = ไฟ)\n4. 水よう日 (suiyoubi) = วันพุธ (水 = น้ำ)\n5. 木よう日 (mokuyoubi) = วันพฤหัสบดี (木 = ไม้/ต้นไม้)\n6. 金よう日 (kinyoubi) = วันศุกร์ (金 = ทอง/เงิน お金)\n7. 土よう日 (doyoubi) = วันเสาร์ (土 = ดิน)\n\n★ จำลำดับ: อาทิตย์(แดด) -> จันทร์(เดือน) -> ไฟ -> น้ำ -> ไม้ -> ทอง -> ดิน"}, {"title": "4. ไวยากรณ์หลักบทที่ 1 - 3 (เก็งข้อสอบ 100%)", "content": "1. ประธาน + は + นาม + です (บอกเล่า) / じゃありません (ปฏิเสธ) / ですか (คำถาม)\n2. คำช่วย も (mo): ใช้แทน は แปลว่า 'ก็...ด้วย/เหมือนกัน'\n   ตัวอย่าง: わたしも タイ人です (ฉันก็เป็นคนไทยเหมือนกัน)\n3. คำช่วย の (no): เชื่อมนาม แสดงความเป็นเจ้าของ หรือขยายลักษณะ\n   ตัวอย่าง: にほんごの ほん (หนังสือภาษาญี่ปุ่น), わたしの かぎ (กุญแจของฉัน)\n4. ไวยากรณ์บอกชอบ/ไม่ชอบ:\n   [สิ่งของ/สิ่งที่เราชอบ] + が + すきです (ชอบ)\n   [สิ่งที่ไม่ชอบ] + が + すきじゃありません (ไม่ชอบ)\n   *ระวัง! คนไทยชอบเผลอใช้ を แต่ต้องใช้ が เสมอ\n5. การถามสถานที่:\n   [สถานที่] は どこですか (ห้องน้ำอยู่ที่ไหน)\n   รูปสุภาพ: おてあらいは どちらですか"}];
 
-let currentQuizIdx = 0;
+/* ===================================================
+   MALE VOICE SYNTHESIS ENGINE (ja-JP)
+   =================================================== */
+let maleVoice = null;
+
+function initMaleVoice() {
+  if (!('speechSynthesis' in window)) return;
+  
+  function pickVoice() {
+    const voices = window.speechSynthesis.getVoices();
+    // 1. Look for Japanese voice with Male keyword or Ichiro/Keita/Naoki/Otoya/Takumi
+    const maleKeywords = ['male', 'ichiro', 'keita', 'naoki', 'otoya', 'takumi', 'kenji', 'daichi', 'ชาย'];
+    
+    // Check ja-JP voices
+    const jaVoices = voices.filter(v => v.lang.includes('ja') || v.lang.includes('JP'));
+    
+    for (const v of jaVoices) {
+      const nameLower = v.name.toLowerCase();
+      if (maleKeywords.some(kw => nameLower.includes(kw))) {
+        maleVoice = v;
+        break;
+      }
+    }
+    
+    // Fallback: Pick any ja-JP voice
+    if (!maleVoice && jaVoices.length > 0) {
+      maleVoice = jaVoices[0];
+    }
+  }
+  
+  pickVoice();
+  if (window.speechSynthesis.onvoiceschanged !== undefined) {
+    window.speechSynthesis.onvoiceschanged = pickVoice;
+  }
+}
+initMaleVoice();
+
+function speakText(text) {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'ja-JP';
+  if (maleVoice) {
+    utter.voice = maleVoice;
+  }
+  // Force pitch to 0.75-0.80 to give a clear male vocal resonance
+  utter.pitch = 0.78;
+  utter.rate = 0.90;
+  window.speechSynthesis.speak(utter);
+}
+
+/* ===================================================
+   NAVIGATION TABS
+   =================================================== */
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-tab-btn').forEach(el => el.classList.remove('active'));
+  
+  const target = document.getElementById('tab-' + tabId);
+  if (target) target.classList.add('active');
+  
+  // Highlight tab
+  const btn = Array.from(document.querySelectorAll('.nav-tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+  if (btn) btn.classList.add('active');
+  
+  if (tabId === 'rush') {
+    startRush();
+  } else {
+    stopRush();
+  }
+}
+
+/* ===================================================
+   PART 5: PERSONA VISUAL CHALLENGE LOGIC
+   =================================================== */
+let curPersonaIdx = 0;
+let personaScore = 0;
+let personaAnswered = false;
+
+function loadPersonaCard(idx) {
+  personaAnswered = false;
+  const item = personaData[idx];
+  
+  document.getElementById('p-card-num').textContent = `CARD ${String(idx+1).padStart(2, '0')} / ${String(personaData.length).padStart(2, '0')}`;
+  document.getElementById('p-avatar-box').textContent = item.avatar_icon;
+  document.getElementById('p-avatar-box').style.background = item.avatar_bg;
+  document.getElementById('p-name-jp').textContent = item.kanji_name;
+  document.getElementById('p-name-en').textContent = item.name + ' (' + item.org + ')';
+  document.getElementById('p-age-val').textContent = item.age + ' ปี (' + item.age_jp + ')';
+  document.getElementById('p-job-val').textContent = item.job + ' [' + item.job_jp + ']';
+  document.getElementById('p-org-val').textContent = item.org;
+  document.getElementById('p-desc-val').textContent = item.desc;
+  
+  document.getElementById('p-counter-text').textContent = `คำถามที่ ${idx+1} จาก ${personaData.length}`;
+  document.getElementById('p-question-text').textContent = item.question;
+  
+  const optBox = document.getElementById('p-options-container');
+  optBox.innerHTML = '';
+  
+  item.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'persona-opt-btn';
+    btn.innerHTML = `<span class="persona-opt-index">${i+1}</span> <span>${opt}</span>`;
+    btn.onclick = () => selectPersonaAnswer(i);
+    optBox.appendChild(btn);
+  });
+  
+  const breakdown = document.getElementById('p-breakdown-box');
+  breakdown.classList.remove('show');
+}
+
+function selectPersonaAnswer(chosen) {
+  if (personaAnswered) return;
+  personaAnswered = true;
+  
+  const item = personaData[curPersonaIdx];
+  const buttons = document.querySelectorAll('.persona-opt-btn');
+  
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === item.answer) {
+      btn.classList.add('correct');
+    } else if (i === chosen) {
+      btn.classList.add('wrong');
+    }
+  });
+  
+  if (chosen === item.answer) {
+    personaScore++;
+    document.getElementById('persona-score-badge').textContent = `คะแนน: ${personaScore} / ${personaData.length}`;
+  }
+  
+  // Show breakdown
+  document.getElementById('b-name').textContent = item.breakdown.name_rule;
+  document.getElementById('b-age').textContent = item.breakdown.age_rule;
+  document.getElementById('b-job').textContent = item.breakdown.job_rule;
+  document.getElementById('b-formula').textContent = item.breakdown.formula;
+  document.getElementById('p-breakdown-box').classList.add('show');
+  
+  // Speak correct Japanese sentence with male voice
+  const rawJp = item.options[item.answer].split(' (')[0];
+  speakText(rawJp);
+}
+
+function nextPersona() {
+  curPersonaIdx = (curPersonaIdx + 1) % personaData.length;
+  loadPersonaCard(curPersonaIdx);
+}
+
+function speakPersonaCard() {
+  const item = personaData[curPersonaIdx];
+  const sentence = `${item.kanji_name}は ${item.age}さいです。${item.job_jp}です。`;
+  speakText(sentence);
+}
+
+/* ===================================================
+   TAB 1: QUIZ 30 ITEMS LOGIC
+   =================================================== */
+let curQuizIdx = 0;
 let quizScore = 0;
 let quizAnswered = false;
 
-let currentFcIdx = 0;
-
-let rushScore = 0;
-let rushTimerInterval = null;
-let rushTimeLeft = 100;
-
-function switchTab(tabId) {
-  document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-  
-  document.getElementById('tab-' + tabId).classList.add('active');
-  const btnIdx = ['quiz', 'flashcard', 'rush', 'sheet'].indexOf(tabId);
-  document.querySelectorAll('.nav-btn')[btnIdx].classList.add('active');
-
-  if(tabId === 'rush') {
-    startRush();
-  } else if (rushTimerInterval) {
-    clearInterval(rushTimerInterval);
-  }
-}
-
-function speak(text) {
-  if ('speechSynthesis' in window) {
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'ja-JP';
-    utter.rate = 0.9;
-    window.speechSynthesis.speak(utter);
-  }
-}
-
-function renderQuiz() {
+function loadQuiz(idx) {
   quizAnswered = false;
-  const q = quizData[currentQuizIdx];
-  document.getElementById('quiz-cat').textContent = q.cat;
-  document.getElementById('quiz-score').textContent = `ข้อที่ ${currentQuizIdx + 1} / ${quizData.length} | คะแนน: ${quizScore}`;
-  document.getElementById('quiz-progress').style.width = `${((currentQuizIdx) / quizData.length) * 100}%`;
+  const q = quizData[idx];
   
-  let qText = q.question;
-  document.getElementById('quiz-q').innerHTML = qText;
+  document.getElementById('quiz-progress-text').textContent = `ข้อที่ ${idx+1} / ${quizData.length}`;
+  document.getElementById('quiz-cat-pill').textContent = q.cat;
+  document.getElementById('quiz-q-text').textContent = q.question;
   
-  const optsContainer = document.getElementById('quiz-opts');
-  optsContainer.innerHTML = '';
-  document.getElementById('quiz-exp').classList.remove('active');
-
-  q.options.forEach((opt, idx) => {
+  const box = document.getElementById('quiz-opt-box');
+  box.innerHTML = '';
+  
+  q.options.forEach((opt, i) => {
     const btn = document.createElement('button');
     btn.className = 'quiz-opt-btn';
-    btn.innerHTML = `<span style="opacity:0.6; font-size:0.85rem;">${['A','B','C','D'][idx]}.</span> ${opt}`;
-    btn.onclick = () => selectQuizAnswer(idx);
-    optsContainer.appendChild(btn);
+    btn.innerHTML = `<span>${opt}</span> <span style="opacity: 0.6; font-size: 0.8rem;">[${i+1}]</span>`;
+    btn.onclick = () => selectQuizAnswer(i);
+    box.appendChild(btn);
   });
+  
+  document.getElementById('quiz-feedback-box').classList.remove('show');
 }
 
-function selectQuizAnswer(selectedIdx) {
+function selectQuizAnswer(chosen) {
   if (quizAnswered) return;
   quizAnswered = true;
-  const q = quizData[currentQuizIdx];
+  
+  const q = quizData[curQuizIdx];
   const buttons = document.querySelectorAll('.quiz-opt-btn');
-
-  buttons.forEach(btn => btn.disabled = true);
-
-  if (selectedIdx === q.answer) {
-    buttons[selectedIdx].classList.add('correct');
+  
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.answer) {
+      btn.classList.add('correct');
+    } else if (i === chosen) {
+      btn.classList.add('wrong');
+    }
+  });
+  
+  if (chosen === q.answer) {
     quizScore++;
+    document.getElementById('quiz-score-pill').textContent = `คะแนน: ${quizScore} / ${quizData.length}`;
+    document.getElementById('quiz-ans-status').textContent = '✅ ถูกต้องตามหลักไวยากรณ์!';
+    document.getElementById('quiz-ans-status').style.color = '#34d399';
   } else {
-    buttons[selectedIdx].classList.add('wrong');
-    buttons[q.answer].classList.add('correct');
+    document.getElementById('quiz-ans-status').textContent = '❌ ยังไม่ถูกต้อง (ดูเฉลยและจุดสังเกตด้านล่าง)';
+    document.getElementById('quiz-ans-status').style.color = '#fb7185';
   }
-
-  document.getElementById('quiz-tip-text').textContent = q.exam_tip;
-  document.getElementById('quiz-hint-text').textContent = q.hint;
-  document.getElementById('quiz-exp').classList.add('active');
-  document.getElementById('quiz-score').textContent = `ข้อที่ ${currentQuizIdx + 1} / ${quizData.length} | คะแนน: ${quizScore}`;
+  
+  document.getElementById('quiz-hint-text').textContent = '💡 คำอธิบาย: ' + q.hint;
+  document.getElementById('quiz-tip-text').textContent = '📌 จุดตายข้อสอบ: ' + q.exam_tip;
+  document.getElementById('quiz-feedback-box').classList.add('show');
+  
+  // Speak correct Japanese choice
+  speakText(q.options[q.answer]);
 }
 
-function nextQuizQuestion() {
-  currentQuizIdx++;
-  if (currentQuizIdx < quizData.length) {
-    renderQuiz();
-  } else {
-    document.getElementById('quiz-progress').style.width = '100%';
-    document.getElementById('quiz-q').innerHTML = `🎉 ยอดเยี่ยมมาก! ทำข้อสอบครบทั้งหมดแล้ว<br><span style="color:#34d399; font-size:1.8rem;">คะแนนที่ได้: ${quizScore} / ${quizData.length}</span>`;
-    document.getElementById('quiz-opts').innerHTML = '';
-    document.getElementById('quiz-exp').classList.remove('active');
-  }
+function nextQuiz() {
+  curQuizIdx = (curQuizIdx + 1) % quizData.length;
+  loadQuiz(curQuizIdx);
 }
 
-function renderCard() {
-  const c = flashcardsData[currentFcIdx];
-  const box = document.getElementById('flashcard-box');
-  box.classList.remove('flipped');
-  document.getElementById('fc-cat').textContent = c.cat;
-  document.getElementById('fc-jp').textContent = c.jp;
-  document.getElementById('fc-kana').innerHTML = `${c.kana} <button class="voice-btn" onclick="event.stopPropagation(); speak('${c.jp}')">🔊 ฟัง</button>`;
-  document.getElementById('fc-th').textContent = c.th;
-  document.getElementById('fc-mnem').textContent = `💡 เทคนิคจำ: ${c.mnem}`;
-  document.getElementById('fc-counter').textContent = `${currentFcIdx + 1} / ${flashcardsData.length}`;
+function speakCurrentQuiz() {
+  const q = quizData[curQuizIdx];
+  speakText(q.options[q.answer]);
+}
+
+/* ===================================================
+   TAB 2: 3D FLASHCARDS LOGIC
+   =================================================== */
+let filteredFlashcards = [...flashcardsData];
+let curCardIdx = 0;
+let isFlipped = false;
+
+function initFlashcards() {
+  const cats = ['ทั้งหมด', ...new Set(flashcardsData.map(c => c.cat))];
+  const container = document.getElementById('fc-filter-container');
+  container.innerHTML = '';
+  
+  cats.forEach((cat, i) => {
+    const chip = document.createElement('button');
+    chip.className = 'fc-filter-chip' + (i === 0 ? ' active' : '');
+    chip.textContent = cat;
+    chip.onclick = () => filterFlashcards(cat, chip);
+    container.appendChild(chip);
+  });
+  
+  renderCard(0);
+}
+
+function filterFlashcards(cat, chipEl) {
+  document.querySelectorAll('.fc-filter-chip').forEach(c => c.classList.remove('active'));
+  chipEl.classList.add('active');
+  
+  if (cat === 'ทั้งหมด') {
+    filteredFlashcards = [...flashcardsData];
+  } else {
+    filteredFlashcards = flashcardsData.filter(c => c.cat === cat);
+  }
+  curCardIdx = 0;
+  renderCard(0);
+}
+
+function renderCard(idx) {
+  if (filteredFlashcards.length === 0) return;
+  curCardIdx = idx;
+  isFlipped = false;
+  document.getElementById('fc-stage').classList.remove('flipped');
+  
+  const c = filteredFlashcards[idx];
+  document.getElementById('fc-front-kanji').textContent = c.jp;
+  document.getElementById('fc-back-th').textContent = c.th;
+  document.getElementById('fc-back-kana').textContent = c.kana;
+  document.getElementById('fc-back-mnem').textContent = '💡 ' + c.mnem;
 }
 
 function flipCard() {
-  document.getElementById('flashcard-box').classList.toggle('flipped');
+  isFlipped = !isFlipped;
+  const stage = document.getElementById('fc-stage');
+  if (isFlipped) {
+    stage.classList.add('flipped');
+    speakCurrentCard();
+  } else {
+    stage.classList.remove('flipped');
+  }
 }
 
 function nextCard() {
-  currentFcIdx = (currentFcIdx + 1) % flashcardsData.length;
-  renderCard();
+  curCardIdx = (curCardIdx + 1) % filteredFlashcards.length;
+  renderCard(curCardIdx);
 }
 
 function prevCard() {
-  currentFcIdx = (currentFcIdx - 1 + flashcardsData.length) % flashcardsData.length;
-  renderCard();
+  curCardIdx = (curCardIdx - 1 + filteredFlashcards.length) % filteredFlashcards.length;
+  renderCard(curCardIdx);
 }
+
+function speakCurrentCard() {
+  const c = filteredFlashcards[curCardIdx];
+  speakText(c.jp);
+}
+
+/* ===================================================
+   TAB 3: SPEED RUN LOGIC (5 Seconds)
+   =================================================== */
+let rushTimer = null;
+let rushLeft = 5;
+let rushIdx = 0;
+let rushStreak = 0;
 
 function startRush() {
-  rushScore = 0;
-  document.getElementById('rush-score').textContent = `คะแนน: ${rushScore}`;
-  document.getElementById('rush-display').style.display = 'block';
-  document.getElementById('rush-over').style.display = 'none';
-  nextRushQuestion();
+  rushStreak = 0;
+  document.getElementById('rush-streak-pill').textContent = 'สตรีค: 0';
+  nextRushItem();
 }
 
-function nextRushQuestion() {
-  if (rushTimerInterval) clearInterval(rushTimerInterval);
-  
-  const item = speedData[Math.floor(Math.random() * speedData.length)];
-  document.getElementById('rush-word').textContent = item.q;
-  
-  let choices = [{text: item.a, correct: true}];
-  item.w.forEach(wrong => choices.push({text: wrong, correct: false}));
-  choices.sort(() => Math.random() - 0.5);
+function stopRush() {
+  if (rushTimer) clearInterval(rushTimer);
+}
 
-  const container = document.getElementById('rush-opts');
-  container.innerHTML = '';
+function nextRushItem() {
+  if (rushTimer) clearInterval(rushTimer);
+  rushIdx = Math.floor(Math.random() * speedData.length);
+  const item = speedData[rushIdx];
+  
+  document.getElementById('rush-word-text').textContent = item.q;
+  speakText(item.q);
+  
+  // Prepare 4 choices (1 correct + 3 wrong)
+  const choices = [item.a, ...item.w].sort(() => Math.random() - 0.5);
+  const box = document.getElementById('rush-opts-box');
+  box.innerHTML = '';
+  
   choices.forEach(ch => {
     const btn = document.createElement('button');
     btn.className = 'quiz-opt-btn';
-    btn.textContent = ch.text;
-    btn.onclick = () => {
-      if(ch.correct) {
-        rushScore += 10;
-        document.getElementById('rush-score').textContent = `คะแนน: ${rushScore}`;
-        nextRushQuestion();
-      } else {
-        endRush();
-      }
-    };
-    container.appendChild(btn);
+    btn.textContent = ch;
+    btn.onclick = () => checkRush(ch === item.a);
+    box.appendChild(btn);
   });
-
-  rushTimeLeft = 100;
-  const step = 2;
-  rushTimerInterval = setInterval(() => {
-    rushTimeLeft -= step;
-    document.getElementById('rush-timer').style.width = `${rushTimeLeft}%`;
-    if(rushTimeLeft <= 0) {
-      clearInterval(rushTimerInterval);
-      endRush();
+  
+  // Timer countdown
+  rushLeft = 5.0;
+  const bar = document.getElementById('rush-bar');
+  bar.style.transform = 'scaleX(1)';
+  
+  const step = 0.1;
+  rushTimer = setInterval(() => {
+    rushLeft -= step;
+    const pct = Math.max(0, rushLeft / 5.0);
+    bar.style.transform = `scaleX(${pct})`;
+    if (rushLeft <= 0) {
+      clearInterval(rushTimer);
+      checkRush(false); // Time out = wrong
     }
-  }, 100);
+  }, step * 1000);
 }
 
-function endRush() {
-  if (rushTimerInterval) clearInterval(rushTimerInterval);
-  document.getElementById('rush-display').style.display = 'none';
-  document.getElementById('rush-over').style.display = 'block';
-  document.getElementById('rush-final').textContent = rushScore;
+function checkRush(correct) {
+  if (rushTimer) clearInterval(rushTimer);
+  if (correct) {
+    rushStreak++;
+    document.getElementById('rush-streak-pill').textContent = `สตรีค: ${rushStreak} 🔥`;
+  } else {
+    rushStreak = 0;
+    document.getElementById('rush-streak-pill').textContent = 'สตรีค: 0';
+  }
+  setTimeout(nextRushItem, 600);
 }
 
-function renderCheatSheets() {
-  const container = document.getElementById('sheet-container');
-  container.innerHTML = '';
-  summarySheets.forEach(sheet => {
-    const div = document.createElement('div');
-    div.className = 'sheet-card';
-    div.innerHTML = `
-      <div class="sheet-title">${sheet.title}</div>
-      <div class="sheet-content">${sheet.content.trim()}</div>
-    `;
-    container.appendChild(div);
+/* ===================================================
+   TAB 4: CHEAT SHEETS
+   =================================================== */
+function initCheatSheets() {
+  const grid = document.getElementById('sheet-grid-container');
+  grid.innerHTML = '';
+  
+  sheetData.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'sheet-card';
+    card.innerHTML = `<h3>📌 ${s.title}</h3><div class="sheet-content">${s.content}</div>`;
+    grid.appendChild(card);
   });
 }
 
-window.onload = () => {
-  renderQuiz();
-  renderCard();
-  renderCheatSheets();
-};
+// Initialize all modules on load
+window.addEventListener('DOMContentLoaded', () => {
+  loadPersonaCard(0);
+  loadQuiz(0);
+  initFlashcards();
+  initCheatSheets();
+});
 </script>
 
 </body>
